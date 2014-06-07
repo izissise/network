@@ -5,13 +5,12 @@
 ## Login   <moriss_h@epitech.net>
 ##
 ## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Sat Jun  7 19:06:18 2014 Hugues
+## Last update Sat Jun  7 21:01:47 2014 Hugues
 ##
 
 SRC		=	inet_accept.c \
 			inet_asynchronous_connect.c \
-			inet.c \
-			select.c
+			inet.c
 
 CC		=	gcc
 FILETYPE	=	.c
