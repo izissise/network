@@ -21,7 +21,8 @@ INCDIR		=	inc/
 
 CFLAGS		+=	-I$(INCDIR)
 CFLAGS		+=	-Wall -Wextra -Winit-self
-CFLAGS		+=	-Wunused-function -pipe -Winit-self
+CFLAGS		+=	-Wunused-function -pipe
+CFLAGS		+=	-O2
 CFLAGS		+=	-static
 
 OBJ		=	$(patsubst %${FILETYPE}, ${OBJDIR}%.o, $(SRC))

@@ -1,6 +1,10 @@
 #ifndef _LISTE_H
 # define _LISTE_H
 
+# ifdef __cplusplus
+extern "C" {
+# endif
+
 # include <stdlib.h>
 
 typedef struct		s_list
@@ -18,5 +22,9 @@ t_list	*find_in_list(t_list *begin, void *data);
 int	enqueue(t_list **begin, void *data);
 t_list	*dequeue(t_list **begin);
 t_list	*top(t_list *begin);
+
+# ifdef __cplusplus
+} // closing brace for extern "C"
+# endif
 
 #endif /* !_LISTE_H */

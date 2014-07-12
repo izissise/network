@@ -1,6 +1,10 @@
 #ifndef SELECT_H_INCLUDED
 # define SELECT_H_INCLUDED
 
+# ifdef __cplusplus
+extern "C" {
+# endif
+
 # include <stdlib.h>
 # include <stdio.h>
 # include <sys/select.h>
@@ -33,5 +37,9 @@ typedef struct	s_selfd
 void	do_select(t_list *fds, struct timeval *tv, void *global_arg);
 t_selfd	*create_fd(int fd, void *data, int (*call)());
 void	destroy_fd(void *fd);
+
+# ifdef __cplusplus
+} // closing brace for extern "C"
+# endif
 
 #endif /* !SELECT_H_INCLUDED */

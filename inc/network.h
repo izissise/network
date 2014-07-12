@@ -1,6 +1,10 @@
 #ifndef NETWORK_H_INCLUDED
 # define NETWORK_H_INCLUDED
 
+# ifdef __cplusplus
+extern "C" {
+# endif
+
 # include <errno.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -41,5 +45,9 @@ int	check_socket_error(t_net *net);
 int	is_connected(t_net *net);
 
 int	bind_reuse(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+
+# ifdef __cplusplus
+} // closing brace for extern "C"
+# endif
 
 #endif /* !NETWORK_H_INCLUDED */
