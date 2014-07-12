@@ -16,6 +16,7 @@ t_net	*peer(t_net *net)
 
   if ((res = malloc(1 * sizeof(t_net))) == NULL)
     return (NULL);
+  memset(res, 0, sizeof(t_net));
   res->socket = -1;
   res->addrlen = sizeof(struct sockaddr_storage);
   ret = getpeername(net->socket, (struct sockaddr*)(&(res->addr)),

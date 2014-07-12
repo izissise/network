@@ -82,6 +82,7 @@ t_net		*create_connection(const char *host, const char *port,
 
   if ((res = malloc(1 * sizeof(t_net))) == NULL)
     return (NULL);
+  memset(res, 0, sizeof(t_net));
   res->socktype = socktype;
   if ((err = ipaddress_init(host, port, res, f)))
     {
@@ -95,10 +96,13 @@ t_net		*create_connection(const char *host, const char *port,
   return (res);
 }
 
-void		close_connection(t_net *net)
+void	close_connection(t_net *net)
 {
   if (net)
-    if (net->socket != -1 && close(net->socket) == -1)
-      perror("close");
-  free(net);
+    {
+      if (net->socket != -1 && close(net->socket) == -1)
+        perror("close");
+      close_connection(net->peer);
+      free(net);
+    }
 }
