@@ -1,16 +1,12 @@
-##
-## Makefile for Makefile in /home/Epitech
-##
-## Made by moriss_h
-## Login   <moriss_h@epitech.net>
-##
-## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Sat Jun  7 21:01:47 2014 Hugues
-##
-
 SRC		=	inet_accept.c \
 			inet_asynchronous_connect.c \
-			inet.c
+			inet.c \
+			inet_reuse.c \
+			liste.c \
+			liste_find.c \
+			ring_buffer.c \
+			ring_buffer_fill.c \
+			select.c
 
 CC		=	gcc
 FILETYPE	=	.c
