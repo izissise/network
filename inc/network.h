@@ -45,6 +45,7 @@ int	check_socket_error(t_net *net);
 int	is_connected(t_net *net);
 
 int	bind_reuse(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+int	set_fd_flags(int fd, int flag, int unset);
 
 # ifdef __cplusplus
 } // closing brace for extern "C"

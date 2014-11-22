@@ -20,11 +20,11 @@ char			*get_ip_addr(t_net *net)
   return ((ret = strdup(buff)) ? ret : strdup("Unknow"));
 }
 
-int		use_ipsocket(t_net *net, struct addrinfo *tmp,
-                   int (*f)(int sockfd, const struct sockaddr *addr,
+static inline int		use_ipsocket(t_net *net, struct addrinfo *tmp,
+						int (*f)(int sockfd, const struct sockaddr *addr,
                             socklen_t addrlen))
 {
-  int		ret;
+  int					ret;
 
   ret = 0;
   memcpy(&(net->addr), tmp->ai_addr, tmp->ai_addrlen);
@@ -44,15 +44,15 @@ int		use_ipsocket(t_net *net, struct addrinfo *tmp,
   return (ret);
 }
 
-int			ipaddress_init(const char *ip, const char *port,
-                       t_net *net, int (*f)(int sockfd,
-                           const struct sockaddr *addr,
-                           socklen_t addrlen))
+static inline int			ipaddress_init(const char *ip, const char *port,
+							t_net *net, int (*f)(int sockfd,
+							const struct sockaddr *addr,
+							socklen_t addrlen))
 {
-  struct addrinfo	req;
-  struct addrinfo	*res;
-  struct addrinfo	*tmp;
-  int			ret;
+  struct addrinfo			req;
+  struct addrinfo			*res;
+  struct addrinfo			*tmp;
+  int						ret;
 
   memset(&req, 0, sizeof(struct addrinfo));
   req.ai_family = AF_UNSPEC;
