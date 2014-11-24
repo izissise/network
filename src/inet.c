@@ -17,7 +17,7 @@ char			*get_ip_addr(t_net *net)
     res = (&(((struct sockaddr_in6*)sa)->sin6_addr));
   inet_ntop(((struct sockaddr*)(&(net->addr)))->sa_family,
             res, buff, sizeof(buff));
-  return ((ret = strdup(buff)) ? ret : strdup("Unknow"));
+  return ((ret = strdup(buff)) ? ret : strdup("Unknown"));
 }
 
 static inline int		use_ipsocket(t_net *net, struct addrinfo *tmp,
@@ -64,6 +64,7 @@ static inline int			ipaddress_init(const char *ip, const char *port,
   while (tmp)
     {
       net->socket = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol);
+      ret = -1;
       if (!((net->socket == -1) || ((ret = use_ipsocket(net, tmp, f)) == -1)))
         break ;
       tmp = tmp->ai_next;
