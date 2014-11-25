@@ -21,7 +21,6 @@ namespace UnixNetwork {
 class UnixNetworkBasicSocket : public UnixSocket, public virtual INetworkBasicSocket
 {
 public:
-public:
   UnixNetworkBasicSocket(const std::string& ip,
                            INetworkSocket::SockType socktype = INetworkSocket::SockType::TCP,
                            const std::string& port = "0",

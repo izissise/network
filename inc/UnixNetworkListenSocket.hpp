@@ -10,7 +10,7 @@
 namespace Network {
 namespace UnixNetwork {
 
-class UnixNetworkListenSocket : public UnixSocket, public virtual INetworkListenSocket
+class UnixNetworkListenSocket : public UnixSocket, virtual public INetworkListenSocket
 {
 	public:
 		UnixNetworkListenSocket(const std::string& listeningIp, const std::string& port,

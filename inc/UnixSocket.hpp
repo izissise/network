@@ -19,7 +19,7 @@
 namespace Network {
 namespace UnixNetwork {
 
-class UnixSocket : public INetworkSocket
+class UnixSocket : virtual public INetworkSocket
 {
 public:
   static const std::map<INetworkSocket::SockType, int> _socktypes;

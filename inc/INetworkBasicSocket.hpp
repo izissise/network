@@ -9,7 +9,7 @@
 
 namespace Network {
 
-class INetworkBasicSocket : public INetworkSocket
+class INetworkBasicSocket : virtual public INetworkSocket
 {
 public:
   virtual ~INetworkBasicSocket() = default;

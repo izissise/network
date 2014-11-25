@@ -9,7 +9,7 @@
 
 namespace Network {
 
-class INetworkListenSocket : public INetworkSocket
+class INetworkListenSocket : virtual public INetworkSocket
 {
 public:
   virtual ~INetworkListenSocket() = default;

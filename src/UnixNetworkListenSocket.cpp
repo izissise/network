@@ -9,7 +9,7 @@ UnixNetworkListenSocket::UnixNetworkListenSocket(const std::string& listeningIp,
     INetworkSocket::SockType socktype, bool reuse)
   : UnixSocket::UnixSocket(listeningIp, socktype, port, reuse ? &UnixNetworkListenSocket::bindReuse : &UnixNetworkListenSocket::bind)
 {
-  ::listen(_socket, INetworkSocket::MAX_QUEUE);
+  ::listen(_socket, 50);
 }
 
 void UnixNetworkListenSocket::updateInfo()
