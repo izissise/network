@@ -3,6 +3,10 @@
 
 # include "NetworkError.hpp"
 
+#include <iostream>
+
+namespace Network {
+
 class INetworkSocket
 {
 public:
@@ -16,8 +20,12 @@ public:
   };
 
 public:
+  virtual ~INetworkSocket() {std::cout << "INetworkSocket::~" << std::endl;};
 
-  virtual ~INetworkSocket() = default;
+  virtual void closeSocket() = 0;
+
+};
+
 };
 
 #endif // INETWORKSOCKET_H

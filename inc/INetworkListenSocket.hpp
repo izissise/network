@@ -1,0 +1,33 @@
+#ifndef INETWORKLISTENSOCKET_HPP
+# define INETWORKLISTENSOCKET_HPP
+
+# include <string>
+
+# include "INetworkSocket.hpp"
+
+namespace Network {
+
+class INetworkListenSocket : public INetworkSocket
+{
+public:
+  virtual ~INetworkListenSocket() = default;
+
+  /**
+   * Close connection
+  **/
+  virtual void closeSocket() = 0;
+
+  /**
+   * Return the current local ip, port, type
+  **/
+  virtual const std::string& getListeningIpAddr() const = 0;
+  virtual uint16_t getListeningPort() const = 0;
+  virtual INetworkSocket::SockType getSockType() const = 0;
+
+
+
+};
+
+};
+
+#endif // INETWORKLISTENSOCKET_HPP

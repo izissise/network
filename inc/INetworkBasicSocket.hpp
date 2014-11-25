@@ -1,5 +1,5 @@
-#ifndef INETWORKCONNECTSOCKET_H
-# define INETWORKCONNECTSOCKET_H
+#ifndef INETWORKBASICSOCKET_H
+# define INETWORKBASICSOCKET_H
 
 # include <vector>
 # include <string>
@@ -7,10 +7,12 @@
 
 # include "INetworkSocket.hpp"
 
-class INetworkConnectSocket : public INetworkSocket
+namespace Network {
+
+class INetworkBasicSocket : public INetworkSocket
 {
 public:
-  virtual ~INetworkConnectSocket() = default;
+  virtual ~INetworkBasicSocket() = default;
 
   /**
    * Can throw
@@ -20,7 +22,13 @@ public:
   /**
    * Close connection
   **/
-  virtual void closeConnection() = 0;
+  virtual void closeSocket() = 0;
+
+  /**
+   * Read/Write on socket
+  **/
+  virtual size_t write(const std::vector<uint8_t>& data) = 0;
+  virtual void read(std::vector<uint8_t>& data, size_t size) = 0;
 
   /**
    * Return the current local ip, port, type
@@ -30,9 +38,8 @@ public:
   virtual const std::string& getRemoteIpAddr() const = 0;
   virtual uint16_t getRemotePort() const = 0;
   virtual INetworkSocket::SockType getSockType() const = 0;
+};
 
-  virtual size_t write(const std::vector<uint8_t>& data) = 0;
-  virtual void read(std::vector<uint8_t>& data, size_t size) = 0;
 };
 
 #endif // INETWORKCONNECTSOCKET_H
