@@ -10,7 +10,7 @@ namespace Network {
 class INetworkSocket
 {
 public:
-  const int MAX_QUEUE = 50;
+  static int MAX_QUEUE;
 
   enum class SockType
   {
@@ -25,6 +25,8 @@ public:
   virtual void closeSocket() = 0;
 
 };
+
+int INetworkSocket::MAX_QUEUE = 50;
 
 };
 

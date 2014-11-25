@@ -2,8 +2,10 @@
 # define INETWORKLISTENSOCKET_HPP
 
 # include <string>
+# include <memory>
 
 # include "INetworkSocket.hpp"
+# include "INetworkBasicSocket.hpp"
 
 namespace Network {
 
@@ -24,7 +26,10 @@ public:
   virtual uint16_t getListeningPort() const = 0;
   virtual INetworkSocket::SockType getSockType() const = 0;
 
-
+  /**
+   * Accept a client
+  **/
+  virtual std::unique_ptr<INetworkBasicSocket> acceptClient() = 0;
 
 };
 
