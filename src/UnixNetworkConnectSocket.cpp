@@ -3,18 +3,17 @@
 namespace Network {
 namespace UnixNetwork {
 
-UnixNetworkConnectSocket::UnixNetworkConnectSocket(const std::string& ip,
+UnixNetworkConnectSocket::UnixNetworkConnectSocket(const std::string& ip, const std::string& port,
     INetworkSocket::SockType socktype,
-    bool nonBlock,
-    const std::string& port)
+    bool nonBlock)
   : UnixNetworkBasicSocket::UnixNetworkBasicSocket(ip, socktype, port,
       nonBlock ? &UnixNetworkConnectSocket::connectNonBlock : &UnixNetworkConnectSocket::connect)
 {
   if (!nonBlock)
-  {
-    _connected = true;
-    updateInfo();
-  }
+    {
+      _connected = true;
+      updateInfo();
+    }
 }
 
 
@@ -22,7 +21,7 @@ void UnixNetworkConnectSocket::connect(int sockfd, const struct sockaddr *addr, 
 {
   int ret;
 
-  ret = ::connect(sockfd, reinterpret_cast<struct sockaddr*>(&addr), addrlen);
+  ret = ::connect(sockfd, addr, addrlen);
   if (ret)
     throw NetworkError(strerror(errno));
 }
@@ -43,7 +42,7 @@ void UnixNetworkConnectSocket::connectNonBlock(int sockfd, const struct sockaddr
   };
 
   if (((ret = setFdFlag(sockfd, O_NONBLOCK, 0)) == -1)
-      || (((ret = ::connect(sockfd, reinterpret_cast<struct sockaddr*>(&addr), addrlen)) == -1)
+      || (((ret = ::connect(sockfd, addr, addrlen)) == -1)
           && (errno != EINPROGRESS))
       || ((ret = setFdFlag(sockfd, O_NONBLOCK, 1)) == -1))
     throw NetworkError(strerror(errno));

@@ -23,7 +23,7 @@ class UnixNetworkBasicSocket : public UnixSocket, public virtual INetworkBasicSo
 public:
   UnixNetworkBasicSocket(const std::string& ip,
                            INetworkSocket::SockType socktype = INetworkSocket::SockType::TCP,
-                           const std::string& port = "0",
+                           const std::string& port = "",
                            const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func = [](int sockfd, const struct sockaddr *addr, socklen_t addrlen){(void)sockfd; (void)addr; (void)addrlen;});
 
   UnixNetworkBasicSocket(int sockfd, INetworkSocket::SockType socktype);

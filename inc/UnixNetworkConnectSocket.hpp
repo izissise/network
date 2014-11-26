@@ -10,10 +10,9 @@ namespace UnixNetwork {
 class UnixNetworkConnectSocket : public UnixNetworkBasicSocket
 {
 public:
-  UnixNetworkConnectSocket(const std::string& ip,
+  UnixNetworkConnectSocket(const std::string& ip, const std::string& port,
                            INetworkSocket::SockType socktype = INetworkSocket::SockType::TCP,
-                           bool nonBlock = true,
-                           const std::string& port = "0");
+                           bool nonBlock = true);
   virtual ~UnixNetworkConnectSocket() = default;
 
 protected:

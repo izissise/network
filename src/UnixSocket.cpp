@@ -23,11 +23,11 @@ UnixSocket::UnixSocket(const std::string& ip,
   struct addrinfo			*tmp;
   int						ret;
 
-  std::memset(&req, 0, sizeof(struct addrinfo));
+  std::memset(&req, 0, sizeof(decltype(req)));
   req.ai_family = AF_UNSPEC;
-  req.ai_socktype = sockTypeToInt(socktype);
+  req.ai_socktype = sockTypeToInt(_socktype);
   req.ai_flags = AI_PASSIVE | AI_NUMERICSERV | AI_ADDRCONFIG;
-  if ((ret = getaddrinfo(ip.c_str(), port.c_str(), &req, &res)))
+  if ((ret = getaddrinfo((ip == "") ? nullptr : ip.c_str(), (port == "") ? nullptr : port.c_str(), &req, &res)))
     throw NetworkError(gai_strerror(ret));
   tmp = res;
   while (tmp)
@@ -37,6 +37,7 @@ UnixSocket::UnixSocket(const std::string& ip,
         throw NetworkError(strerror(errno));
 
       ret = 0;
+      std::memset(&_addr, 0, sizeof(decltype(_addr)));
       std::memcpy(&_addr, tmp->ai_addr, tmp->ai_addrlen);
       _addr.ss_family = tmp->ai_addr->sa_family;
       _socktype = intToSockType(tmp->ai_socktype);
