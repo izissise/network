@@ -5,14 +5,14 @@
 # include <string>
 # include <cstdint>
 
-# include "INetworkSocket.hpp"
+# include "ISocket.hpp"
 
 namespace Network {
 
-class INetworkBasicSocket : virtual public INetworkSocket
+class IBasicSocket : virtual public ISocket
 {
 public:
-  virtual ~INetworkBasicSocket() = default;
+  virtual ~IBasicSocket() = default;
 
   /**
    * Can throw
@@ -37,7 +37,7 @@ public:
   virtual uint16_t getPort() const = 0;
   virtual const std::string& getRemoteIpAddr() const = 0;
   virtual uint16_t getRemotePort() const = 0;
-  virtual INetworkSocket::SockType getSockType() const = 0;
+  virtual ISocket::SockType getSockType() const = 0;
 };
 
 };

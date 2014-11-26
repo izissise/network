@@ -3,11 +3,11 @@
 namespace Network {
 namespace UnixNetwork {
 
-UnixNetworkConnectSocket::UnixNetworkConnectSocket(const std::string& ip, const std::string& port,
-    INetworkSocket::SockType socktype,
+ConnectSocket::ConnectSocket(const std::string& ip, const std::string& port,
+    ISocket::SockType socktype,
     bool nonBlock)
-  : UnixNetworkBasicSocket::UnixNetworkBasicSocket(ip, socktype, port,
-      nonBlock ? &UnixNetworkConnectSocket::connectNonBlock : &UnixNetworkConnectSocket::connect)
+  : BasicSocket::BasicSocket(ip, socktype, port,
+      nonBlock ? &ConnectSocket::connectNonBlock : &ConnectSocket::connect)
 {
   if (!nonBlock)
     {
@@ -17,16 +17,16 @@ UnixNetworkConnectSocket::UnixNetworkConnectSocket(const std::string& ip, const 
 }
 
 
-void UnixNetworkConnectSocket::connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+void ConnectSocket::connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
   int ret;
 
   ret = ::connect(sockfd, addr, addrlen);
   if (ret)
-    throw NetworkError(strerror(errno));
+    throw Error(strerror(errno));
 }
 
-void UnixNetworkConnectSocket::connectNonBlock(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+void ConnectSocket::connectNonBlock(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
   int	ret;
 
@@ -45,7 +45,7 @@ void UnixNetworkConnectSocket::connectNonBlock(int sockfd, const struct sockaddr
       || (((ret = ::connect(sockfd, addr, addrlen)) == -1)
           && (errno != EINPROGRESS))
       || ((ret = setFdFlag(sockfd, O_NONBLOCK, 1)) == -1))
-    throw NetworkError(strerror(errno));
+    throw Error(strerror(errno));
 }
 
 };

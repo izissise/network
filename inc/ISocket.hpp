@@ -1,11 +1,11 @@
 #ifndef INETWORKSOCKET_H
 # define INETWORKSOCKET_H
 
-# include "NetworkError.hpp"
+# include "Error.hpp"
 
 namespace Network {
 
-class INetworkSocket
+class ISocket
 {
 public:
   enum class SockType
@@ -16,7 +16,7 @@ public:
   };
 
 public:
-  virtual ~INetworkSocket() = default;
+  virtual ~ISocket() = default;
 
   virtual void closeSocket() = 0;
 

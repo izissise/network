@@ -1,19 +1,19 @@
 #ifndef UNIXNETWORKCONNECTSOCKET_H
 # define UNIXNETWORKCONNECTSOCKET_H
 
-# include "INetworkSocket.hpp"
+# include "ISocket.hpp"
 # include "UnixNetworkBasicSocket.hpp"
 
 namespace Network {
 namespace UnixNetwork {
 
-class UnixNetworkConnectSocket : public UnixNetworkBasicSocket
+class ConnectSocket : public BasicSocket
 {
 public:
-  UnixNetworkConnectSocket(const std::string& ip, const std::string& port,
-                           INetworkSocket::SockType socktype = INetworkSocket::SockType::TCP,
+  ConnectSocket(const std::string& ip, const std::string& port,
+                           ISocket::SockType socktype = ISocket::SockType::TCP,
                            bool nonBlock = true);
-  virtual ~UnixNetworkConnectSocket() = default;
+  virtual ~ConnectSocket() = default;
 
 protected:
   static void connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);

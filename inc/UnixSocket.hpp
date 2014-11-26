@@ -14,46 +14,46 @@
 # include <arpa/inet.h>
 # include <fcntl.h>
 
-# include "INetworkSocket.hpp"
+# include "ISocket.hpp"
 
 namespace Network {
 namespace UnixNetwork {
 
-class UnixSocket : virtual public INetworkSocket
+class Socket : virtual public ISocket
 {
 public:
-  static const std::map<INetworkSocket::SockType, int> _socktypes;
+  static const std::map<ISocket::SockType, int> _socktypes;
 
 public:
-  UnixSocket(const std::string& ip,
-             INetworkSocket::SockType socktype,
+  Socket(const std::string& ip,
+             ISocket::SockType socktype,
              const std::string& port,
              const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func);
 
-  UnixSocket(int sockFd, INetworkSocket::SockType socktype);
+  Socket(int sockFd, ISocket::SockType socktype);
 
-  UnixSocket(const UnixSocket&) = delete;
-  UnixSocket& operator=(const UnixSocket&) = delete;
+  Socket(const Socket&) = delete;
+  Socket& operator=(const Socket&) = delete;
 
-  virtual ~UnixSocket();
+  virtual ~Socket();
 
   void closeSocket() override;
 
   int getSockFd() const {return _socket;};
-  INetworkSocket::SockType getSockType() const {return _socktype;};
+  ISocket::SockType getSockType() const {return _socktype;};
 
 protected:
   static std::string ipAddr(const struct sockaddr_storage& addr);
   static uint16_t portNumber(const struct sockaddr_storage& addr);
-  static INetworkSocket::SockType intToSockType(int t);
-  static int sockTypeToInt(INetworkSocket::SockType t);
+  static ISocket::SockType intToSockType(int t);
+  static int sockTypeToInt(ISocket::SockType t);
   virtual void updateInfo();
 
 protected:
   struct sockaddr_storage	_addr;
   socklen_t				    _addrlen;
   int						_socket;
-  INetworkSocket::SockType	_socktype;
+  ISocket::SockType			_socktype;
 };
 
 };

@@ -7,11 +7,11 @@
 
 namespace Network {
 
-class NetworkError : public std::runtime_error
+class Error : public std::runtime_error
 {
 	public:
-		NetworkError(const std::string& err) throw();
-		virtual ~NetworkError() throw() = default;
+		Error(const std::string& err) throw();
+		virtual ~Error() throw() = default;
 };
 
 };

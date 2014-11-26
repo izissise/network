@@ -3,26 +3,26 @@
 namespace Network {
 namespace UnixNetwork {
 
-UnixNetworkBasicSocket::UnixNetworkBasicSocket(const std::string& ip,
-    INetworkSocket::SockType socktype,
+BasicSocket::BasicSocket(const std::string& ip,
+    ISocket::SockType socktype,
     const std::string& port,
     const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func)
-  : UnixSocket::UnixSocket(ip, socktype, port, func), _connected(false)
+  : Socket::Socket(ip, socktype, port, func), _connected(false)
 {
   updateInfo();
 }
 
-UnixNetworkBasicSocket::UnixNetworkBasicSocket(int sockfd, INetworkSocket::SockType socktype)
-  : UnixSocket::UnixSocket(sockfd, socktype), _connected(true)
+BasicSocket::BasicSocket(int sockfd, ISocket::SockType socktype)
+  : Socket::Socket(sockfd, socktype), _connected(true)
 {
   updateInfo();
 }
 
-UnixNetworkBasicSocket::~UnixNetworkBasicSocket()
+BasicSocket::~BasicSocket()
 {
 }
 
-bool UnixNetworkBasicSocket::isConnected()
+bool BasicSocket::isConnected()
 {
   if (_connected)
     return true;
@@ -38,7 +38,7 @@ bool UnixNetworkBasicSocket::isConnected()
   if ((ret = (select(_socket + 1, NULL, &fdset, NULL, &tv)) <= 0))
     {
       if (ret == -1)
-        throw NetworkError(strerror(errno));
+        throw Error(strerror(errno));
       return false;
     }
 
@@ -49,30 +49,30 @@ bool UnixNetworkBasicSocket::isConnected()
                                   &_addrlen) == -1)
     {
       errno = (ret > 0) ? ret : errno;
-      throw NetworkError(strerror(errno));
+      throw Error(strerror(errno));
     }
   updateInfo();
   _connected = true;
   return _connected;
 }
 
-void UnixNetworkBasicSocket::closeSocket()
+void BasicSocket::closeSocket()
 {
-  UnixSocket::closeSocket();
+  Socket::closeSocket();
   _connected = false;
 }
 
-size_t UnixNetworkBasicSocket::write(const std::vector<uint8_t>& data)
+size_t BasicSocket::write(const std::vector<uint8_t>& data)
 {
   int ret;
 
   ret = ::write(_socket, data.data(), data.size());
   if (ret == -1)
-    throw NetworkError(strerror(errno));
+    throw Error(strerror(errno));
   return ret;
 }
 
-void UnixNetworkBasicSocket::read(std::vector<uint8_t>& data, size_t size)
+void BasicSocket::read(std::vector<uint8_t>& data, size_t size)
 {
   int ret;
   uint8_t *buff = new uint8_t[size];
@@ -81,7 +81,7 @@ void UnixNetworkBasicSocket::read(std::vector<uint8_t>& data, size_t size)
   if (ret == -1)
     {
       delete[] buff;
-      throw NetworkError(strerror(errno));
+      throw Error(strerror(errno));
     }
   data.resize(ret);
   for (size_t i = 0; i < size; ++i)
@@ -89,16 +89,16 @@ void UnixNetworkBasicSocket::read(std::vector<uint8_t>& data, size_t size)
   delete[] buff;
 }
 
-void UnixNetworkBasicSocket::updateInfo()
+void BasicSocket::updateInfo()
 {
   struct sockaddr_storage peerAddr;
 
-  UnixSocket::updateInfo();
+  Socket::updateInfo();
 
   socklen_t peerAddrlen = sizeof(decltype(peerAddr));
   int ret = getpeername(_socket, reinterpret_cast<struct sockaddr*>(&peerAddr), &peerAddrlen);
   if (ret)
-    throw NetworkError(strerror(errno));
+    throw Error(strerror(errno));
 
   _ip = ipAddr(_addr);
   _port = portNumber(_addr);

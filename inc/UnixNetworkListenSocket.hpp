@@ -5,26 +5,26 @@
 # include <cstdint>
 
 # include "UnixSocket.hpp"
-# include "INetworkListenSocket.hpp"
+# include "IListenSocket.hpp"
 
 namespace Network {
 namespace UnixNetwork {
 
-class UnixNetworkListenSocket : public UnixSocket, virtual public INetworkListenSocket
+class ListenSocket : public Socket, virtual public IListenSocket
 {
 	public:
-		UnixNetworkListenSocket(const std::string& listeningIp, const std::string& port,
-								INetworkSocket::SockType socktype = INetworkSocket::SockType::TCP,
+		ListenSocket(const std::string& listeningIp, const std::string& port,
+								ISocket::SockType socktype = ISocket::SockType::TCP,
 								bool reuse = true);
-		virtual ~UnixNetworkListenSocket() = default;
+		virtual ~ListenSocket() = default;
 
-		void closeSocket() override {UnixSocket::closeSocket();};
+		void closeSocket() override {Socket::closeSocket();};
 
-		std::unique_ptr<INetworkBasicSocket> acceptClient() override;
+		std::unique_ptr<IBasicSocket> acceptClient() override;
 
 		const std::string& getListeningIpAddr() const override {return _ip;};
 		uint16_t getListeningPort() const override {return _port;};
-		INetworkSocket::SockType getSockType() const override {return UnixSocket::getSockType();};
+		ISocket::SockType getSockType() const override {return Socket::getSockType();};
 
 	protected:
 		static void bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);

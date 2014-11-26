@@ -4,15 +4,15 @@
 # include <string>
 # include <memory>
 
-# include "INetworkSocket.hpp"
-# include "INetworkBasicSocket.hpp"
+# include "ISocket.hpp"
+# include "IBasicSocket.hpp"
 
 namespace Network {
 
-class INetworkListenSocket : virtual public INetworkSocket
+class IListenSocket : virtual public ISocket
 {
 public:
-  virtual ~INetworkListenSocket() = default;
+  virtual ~IListenSocket() = default;
 
   /**
    * Close connection
@@ -24,12 +24,12 @@ public:
   **/
   virtual const std::string& getListeningIpAddr() const = 0;
   virtual uint16_t getListeningPort() const = 0;
-  virtual INetworkSocket::SockType getSockType() const = 0;
+  virtual ISocket::SockType getSockType() const = 0;
 
   /**
    * Accept a client
   **/
-  virtual std::unique_ptr<INetworkBasicSocket> acceptClient() = 0;
+  virtual std::unique_ptr<IBasicSocket> acceptClient() = 0;
 
 };
 
