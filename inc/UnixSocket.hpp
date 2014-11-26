@@ -17,7 +17,7 @@
 # include "ISocket.hpp"
 
 namespace Network {
-namespace UnixNetwork {
+namespace Unix {
 
 class Socket : virtual public ISocket
 {

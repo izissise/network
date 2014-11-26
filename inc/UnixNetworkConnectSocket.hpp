@@ -5,7 +5,7 @@
 # include "UnixNetworkBasicSocket.hpp"
 
 namespace Network {
-namespace UnixNetwork {
+namespace Unix {
 
 class ConnectSocket : public BasicSocket
 {

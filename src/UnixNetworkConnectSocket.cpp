@@ -1,7 +1,7 @@
 #include "UnixNetworkConnectSocket.hpp"
 
 namespace Network {
-namespace UnixNetwork {
+namespace Unix {
 
 ConnectSocket::ConnectSocket(const std::string& ip, const std::string& port,
     ISocket::SockType socktype,

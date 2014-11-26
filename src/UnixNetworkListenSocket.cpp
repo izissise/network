@@ -3,7 +3,7 @@
 #include "UnixNetworkBasicSocket.hpp"
 
 namespace Network {
-namespace UnixNetwork {
+namespace Unix {
 
 ListenSocket::ListenSocket(const std::string& listeningIp, const std::string& port,
 								ISocket::SockType socktype,

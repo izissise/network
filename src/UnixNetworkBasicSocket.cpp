@@ -1,7 +1,7 @@
 #include "UnixNetworkBasicSocket.hpp"
 
 namespace Network {
-namespace UnixNetwork {
+namespace Unix {
 
 BasicSocket::BasicSocket(const std::string& ip,
     ISocket::SockType socktype,

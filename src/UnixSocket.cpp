@@ -4,7 +4,7 @@
 #include <algorithm>
 
 namespace Network {
-namespace UnixNetwork {
+namespace Unix {
 
 const std::map<ISocket::SockType, int> Socket::_socktypes = {
   {ISocket::SockType::TCP, SOCK_STREAM},

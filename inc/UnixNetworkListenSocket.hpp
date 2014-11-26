@@ -8,7 +8,7 @@
 # include "IListenSocket.hpp"
 
 namespace Network {
-namespace UnixNetwork {
+namespace Unix {
 
 class ListenSocket : public Socket, virtual public IListenSocket
 {

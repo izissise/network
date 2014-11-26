@@ -16,7 +16,7 @@
 # include "UnixSocket.hpp"
 
 namespace Network {
-namespace UnixNetwork {
+namespace Unix {
 
 class BasicSocket : public Socket, public virtual IBasicSocket
 {
