@@ -10,6 +10,7 @@ UnixNetworkListenSocket::UnixNetworkListenSocket(const std::string& listeningIp,
   : UnixSocket::UnixSocket(listeningIp, socktype, port, reuse ? &UnixNetworkListenSocket::bindReuse : &UnixNetworkListenSocket::bind)
 {
   ::listen(_socket, 50);
+  updateInfo();
 }
 
 void UnixNetworkListenSocket::updateInfo()

@@ -68,7 +68,6 @@ UnixSocket::UnixSocket(const std::string& ip,
 UnixSocket::UnixSocket(int sockfd, INetworkSocket::SockType socktype)
   : _socket(sockfd), _socktype(socktype)
 {
-  updateInfo();
 }
 
 UnixSocket::~UnixSocket()

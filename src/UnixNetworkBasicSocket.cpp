@@ -9,11 +9,13 @@ UnixNetworkBasicSocket::UnixNetworkBasicSocket(const std::string& ip,
     const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func)
   : UnixSocket::UnixSocket(ip, socktype, port, func), _connected(false)
 {
+  updateInfo();
 }
 
 UnixNetworkBasicSocket::UnixNetworkBasicSocket(int sockfd, INetworkSocket::SockType socktype)
   : UnixSocket::UnixSocket(sockfd, socktype), _connected(true)
 {
+  updateInfo();
 }
 
 UnixNetworkBasicSocket::~UnixNetworkBasicSocket()
