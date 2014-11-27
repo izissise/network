@@ -1,6 +1,9 @@
 #ifndef INETWORKSOCKET_H
 # define INETWORKSOCKET_H
 
+# include <string>
+# include <cstring>
+
 # include "Error.hpp"
 
 namespace Network {
@@ -22,6 +25,24 @@ public:
 
   virtual void closeSocket() = 0;
 
+};
+
+struct Identity
+{
+  Identity(const std::string& Ip, uint16_t Port)
+    : ip(Ip), port(Port)
+  {
+  };
+
+  Identity(const Identity&) = default;
+  Identity& operator=(const Identity&) = default;
+
+  ~Identity() = default;
+
+  bool operator==(const Identity&);
+
+  std::string ip;
+  uint16_t    port;
 };
 
 };

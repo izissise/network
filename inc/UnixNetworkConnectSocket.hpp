@@ -12,7 +12,7 @@ class ConnectSocket : public BasicSocket
 public:
   ConnectSocket(const std::string& ip, const std::string& port,
                            ISocket::SockType socktype = ISocket::SockType::TCP,
-                           bool nonBlock = true);
+                           bool nonBlock = false);
   virtual ~ConnectSocket() = default;
 
 protected:

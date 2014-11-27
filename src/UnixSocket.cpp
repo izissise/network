@@ -59,6 +59,8 @@ Socket::Socket(const std::string& ip,
           _socket = -1;
           ret = -1;
         }
+      if (ret != -1)
+        break;
       tmp = tmp->ai_next;
     }
   freeaddrinfo(res);

@@ -1,12 +1,14 @@
 #include "UnixNetworkBasicSocket.hpp"
 
+#include <memory>
+
 namespace Network {
 namespace Unix {
 
 BasicSocket::BasicSocket(const std::string& ip,
-    ISocket::SockType socktype,
-    const std::string& port,
-    const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func)
+                         ISocket::SockType socktype,
+                         const std::string& port,
+                         const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func)
   : Socket::Socket(ip, socktype, port, func), _connected(false)
 {
   updateInfo();
@@ -75,18 +77,13 @@ size_t BasicSocket::write(const Network::Buffer& data)
 void BasicSocket::read(Network::Buffer& data, size_t size)
 {
   int ret;
-  uint8_t *buff = new uint8_t[size];
+  std::unique_ptr<char[]> 	buff(new char[size]);
 
-  ret = ::read(_socket, buff, size);
+  ret = ::read(_socket, buff.get(), size);
   if (ret == -1)
-    {
-      delete[] buff;
-      throw Error(strerror(errno));
-    }
+    throw Error(strerror(errno));
   data.resize(ret);
-  for (size_t i = 0; i < size; ++i)
-    data[i] = buff[i];
-  delete[] buff;
+  data.assign(buff.get(), ret);
 }
 
 void BasicSocket::updateInfo()

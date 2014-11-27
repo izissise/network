@@ -31,6 +31,11 @@ public:
   **/
   virtual std::unique_ptr<IBasicSocket> acceptClient() = 0;
 
+  /**
+   * Udp clients helpers
+  **/
+  virtual Network::Identity recvFrom(Network::Buffer& data, size_t size) = 0;
+  virtual size_t sendTo(const Network::Identity& cli, const Network::Buffer& data) = 0;
 };
 
 };
