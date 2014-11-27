@@ -53,9 +53,7 @@ Network::Identity ListenSocket::recvFrom(Network::Buffer& data, size_t size)
     throw Error(strerror(errno));
   data.resize(ret);
   data.assign(buff.get(), ret);
-  Network::Identity			cli("a", 10);
-  //update client info here
-  return cli;
+  return Network::Identity(ipAddr(raddr), portNumber(raddr));
 }
 
 size_t ListenSocket::sendTo(const Network::Identity &cli, const Network::Buffer& data)

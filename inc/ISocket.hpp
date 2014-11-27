@@ -29,7 +29,7 @@ public:
 
 struct Identity
 {
-  Identity(const std::string& Ip, uint16_t Port)
+  Identity(const std::string& Ip = "", uint16_t Port = 0)
     : ip(Ip), port(Port)
   {
   };
