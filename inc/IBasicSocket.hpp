@@ -27,8 +27,8 @@ public:
   /**
    * Read/Write on socket
   **/
-  virtual size_t write(const std::vector<uint8_t>& data) = 0;
-  virtual void read(std::vector<uint8_t>& data, size_t size) = 0;
+  virtual size_t write(const Network::Buffer& data) = 0;
+  virtual void read(Network::Buffer& data, size_t size) = 0;
 
   /**
    * Return the current local ip, port, type

@@ -62,7 +62,7 @@ void BasicSocket::closeSocket()
   _connected = false;
 }
 
-size_t BasicSocket::write(const std::vector<uint8_t>& data)
+size_t BasicSocket::write(const Network::Buffer& data)
 {
   int ret;
 
@@ -72,7 +72,7 @@ size_t BasicSocket::write(const std::vector<uint8_t>& data)
   return ret;
 }
 
-void BasicSocket::read(std::vector<uint8_t>& data, size_t size)
+void BasicSocket::read(Network::Buffer& data, size_t size)
 {
   int ret;
   uint8_t *buff = new uint8_t[size];

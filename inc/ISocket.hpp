@@ -5,6 +5,8 @@
 
 namespace Network {
 
+typedef std::string Buffer;
+
 class ISocket
 {
 public:

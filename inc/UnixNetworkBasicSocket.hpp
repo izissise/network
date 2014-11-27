@@ -40,8 +40,8 @@ public:
   uint16_t getRemotePort() const override {return _remotePort;};
   ISocket::SockType getSockType() const override {return Socket::getSockType();};
 
-  size_t write(const std::vector<uint8_t>& data) override;
-  void read(std::vector<uint8_t>& data, size_t size) override;
+  size_t write(const Network::Buffer& data) override;
+  void read(Network::Buffer& data, size_t size) override;
 
 protected:
   void updateInfo() override;
