@@ -1,10 +1,10 @@
-#include "UnixSocket.hpp"
+#include "Win/WinSocket.hpp"
 
 #include <cstring>
 #include <algorithm>
 
 namespace Network {
-namespace Unix {
+namespace Win {
 
 const std::map<ISocket::SockType, int> Socket::_socktypes = {
   {ISocket::SockType::TCP, SOCK_STREAM},

@@ -1,11 +1,11 @@
-#ifndef UNIXNETWORKCONNECTSOCKET_H
-# define UNIXNETWORKCONNECTSOCKET_H
+#ifndef WINNETWORKCONNECTSOCKET_H
+# define WINNETWORKCONNECTSOCKET_H
 
 # include "ISocket.hpp"
-# include "UnixNetworkBasicSocket.hpp"
+# include "Win/WinNetworkBasicSocket.hpp"
 
 namespace Network {
-namespace Unix {
+namespace Win {
 
 class ConnectSocket : public BasicSocket
 {
@@ -23,4 +23,4 @@ protected:
 };
 };
 
-#endif // UNIXNETWORKCONNECTSOCKET_H
+#endif // WinNETWORKCONNECTSOCKET_H
