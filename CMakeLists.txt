@@ -38,7 +38,6 @@ OPTION(GENERATE_DOC "Decide if documentation should be generated." OFF)
 
 # --- global compiler flags ---
 if (UNIX)
-if (UNIX)
   COMPILER_FLAGS(FLAGS "-pipe" "-Wall" "-Wextra"
 			   "--std=c++1y"
 			   "-Wchar-subscripts" "-Winit-self" "-Wswitch-enum"
@@ -53,13 +52,7 @@ if (UNIX)
 			   )
 elseif (MSVC)
   COMPILER_FLAGS(FLAGS "/wd4251" # needs to have dll-interface to be used by clients
-			   "/wd4275" # exported class derived from non-exported class
-			   )
-endif()
-
-elseif (MSVC)
-  COMPILER_CXX_FLAGS(FLAGS "/wd4251" # needs to have dll-interface to be used by clients
-			   "/wd4275" # exported class derived from non-exported class
+		       "/wd4275" # exported class derived from non-exported class
 			   )
 endif()
 
@@ -67,17 +60,36 @@ endif()
 DEFINE_PROJECT_VERSION(PROJECT 0 0 1 "snapshot")
 CURRENT_DATE(PROJECT_BUILD_DATE)
 
-# All source files using globs
-file(
-  GLOB_RECURSE
-  lib_source_files
-  src/*
-)
+# All source files
+set(lib_source_files "src/Error.cpp")
+     
+if (WIN32)
+set(lib_source_files ${lib_source_files}
+		     "src/inet_accept.c"
+		     "src/inet_asynchronous_connect.c"
+		     "src/inet.c"
+		     "src/inet_reuse.c"
+		     "src/liste.c"
+		     "src/liste_find.c"
+		     "src/ring_buffer.c"
+		     "src/ring_buffer_fill.c"
+		     "src/select.c"
+		     "src/Win/WinNetworkBasicSocket.cpp"
+		     "src/Win/WinNetworkConnectSocket.cpp"
+		     "src/Win/WinNetworkListenSocket.cpp"
+		     "src/Win/WinSocket.cpp")
+elseif(UNIX)
+set(lib_source_files ${lib_source_files}
+		     "src/Unix/UnixNetworkBasicSocket.cpp"
+		     "src/Unix/UnixNetworkConnectSocket.cpp"
+		     "src/Unix/UnixNetworkListenSocket.cpp"
+		     "src/Unix/UnixSocket.cpp")
+endif()
 
 file(
   GLOB_RECURSE
   lib_include_files
-   inc/*
+  inc/*
 )
 
 include_directories("${INCLUDE_DIRECTORY}")
