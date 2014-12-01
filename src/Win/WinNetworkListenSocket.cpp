@@ -100,14 +100,15 @@ void ListenSocket::bind(int sockfd, const struct sockaddr * addr, socklen_t addr
 
 void ListenSocket::bindReuse(int sockfd, const struct sockaddr * addr, socklen_t addrlen)
 {
-  int	yes;
+  /*int	yes;
 
   yes = 1;
   if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
     throw Error(strerror(errno));
   int ret = ::bind(sockfd, addr, addrlen);
   if (ret)
-    throw Error(strerror(errno));
+    throw Error(strerror(errno));*/
+  throw std::runtime_error("Win::ListenSocket::bindReuse not implemented");
 }
 
 };

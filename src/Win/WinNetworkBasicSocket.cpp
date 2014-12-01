@@ -26,7 +26,7 @@ BasicSocket::~BasicSocket()
 
 bool BasicSocket::isConnected()
 {
-  if (_connected)
+ /* if (_connected)
     return true;
 
   int			ret;
@@ -54,7 +54,7 @@ bool BasicSocket::isConnected()
       throw Error(strerror(errno));
     }
   updateInfo();
-  _connected = true;
+  _connected = true;*/
   return _connected;
 }
 
@@ -68,7 +68,7 @@ size_t BasicSocket::write(const Network::Buffer& data)
 {
   int ret;
 
-  ret = ::write(_socket, data.data(), data.size());
+  ret = send(_socket, data.data(), data.size(), 0);
   if (ret == -1)
     throw Error(strerror(errno));
   return ret;
@@ -79,7 +79,7 @@ void BasicSocket::read(Network::Buffer& data, size_t size)
   int ret;
   std::unique_ptr<char[]> 	buff(new char[size]);
 
-  ret = ::read(_socket, buff.get(), size);
+  ret = recv(_socket, buff.get(), size, 0);
   if (ret == -1)
     throw Error(strerror(errno));
   data.resize(ret);

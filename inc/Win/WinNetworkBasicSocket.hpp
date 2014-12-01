@@ -4,13 +4,9 @@
 # include <string>
 # include <cstring>
 
-# include <errno.h>
-# include <unistd.h>
-# include <sys/types.h>
-# include <sys/socket.h>
-# include <netdb.h>
-# include <arpa/inet.h>
-# include <fcntl.h>
+# include <winsock2.h>
+# include <ws2tcpip.h>
+# include <windows.h>
 
 # include "IBasicSocket.hpp"
 # include "Win/WinSocket.hpp"

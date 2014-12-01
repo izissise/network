@@ -26,7 +26,7 @@ Socket::Socket(const std::string& ip,
   std::memset(&req, 0, sizeof(decltype(req)));
   req.ai_family = AF_UNSPEC;
   req.ai_socktype = sockTypeToInt(_socktype);
-  req.ai_flags = AI_PASSIVE | AI_NUMERICSERV | AI_ADDRCONFIG;
+  req.ai_flags = AI_PASSIVE;
   if ((ret = getaddrinfo((ip == "") ? nullptr : ip.c_str(), (port == "") ? nullptr : port.c_str(), &req, &res)))
     throw Error(gai_strerror(ret));
   tmp = res;
@@ -91,7 +91,7 @@ std::string Socket::ipAddr(const struct sockaddr_storage& addr)
 {
   const struct sockaddr	*sa;
   const void			*res;
-  char					buff[BUFSIZ];
+  char					buff[BUFSIZ] = { 0 };
 
   res = NULL;
   sa = reinterpret_cast<const struct sockaddr*>(&addr);

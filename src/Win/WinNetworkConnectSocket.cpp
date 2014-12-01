@@ -28,7 +28,7 @@ void ConnectSocket::connect(int sockfd, const struct sockaddr *addr, socklen_t a
 
 void ConnectSocket::connectNonBlock(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
-  int	ret;
+ /* int	ret;
 
   auto setFdFlag = [](int fd, int flag, int unset) -> bool {
     int	flags;
@@ -45,7 +45,8 @@ void ConnectSocket::connectNonBlock(int sockfd, const struct sockaddr *addr, soc
       || (((ret = ::connect(sockfd, addr, addrlen)) == -1)
           && (errno != EINPROGRESS))
       || ((ret = setFdFlag(sockfd, O_NONBLOCK, 1)) == -1))
-    throw Error(strerror(errno));
+    throw Error(strerror(errno));*/
+    throw std::runtime_error("Win::ConnectSocket::connectNonBlock not implemented.");
 }
 
 };

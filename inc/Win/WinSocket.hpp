@@ -6,18 +6,16 @@
 # include <functional>
 # include <cstdint>
 
-# include <errno.h>
-# include <unistd.h>
-# include <sys/types.h>
-# include <sys/socket.h>
-# include <netdb.h>
-# include <arpa/inet.h>
-# include <fcntl.h>
+# include <winsock2.h>
+# include <ws2tcpip.h>
+# include <windows.h>
 
 # include "ISocket.hpp"
 
 namespace Network {
 namespace Win {
+
+typedef unsigned short in_port_t;
 
 class Socket : virtual public ISocket
 {
@@ -26,9 +24,9 @@ public:
 
 public:
   Socket(const std::string& ip,
-             ISocket::SockType socktype,
-             const std::string& port,
-             const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func);
+         ISocket::SockType socktype,
+         const std::string& port,
+         const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func);
 
   Socket(int sockFd, ISocket::SockType socktype);
 
@@ -48,6 +46,7 @@ protected:
   static ISocket::SockType intToSockType(int t);
   static int sockTypeToInt(ISocket::SockType t);
   virtual void updateInfo();
+  static char* inet_ntop(int af, const void* src, char* dest, size_t length);
 
 protected:
   struct sockaddr_storage	_addr;
