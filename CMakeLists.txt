@@ -61,9 +61,12 @@ DEFINE_PROJECT_VERSION(PROJECT 0 0 1 "snapshot")
 CURRENT_DATE(PROJECT_BUILD_DATE)
 
 # All source files
-set(lib_source_files "src/Error.cpp")
-     
+set(lib_source_files "src/Error.cpp"
+		     "src/SocketFactory.cpp")
+
+set(BUILDTARGET "Unknown")
 if (WIN32)
+set(BUILDTARGET "WIN32")
 set(lib_source_files ${lib_source_files}
 		     "src/inet_accept.c"
 		     "src/inet_asynchronous_connect.c"
@@ -79,12 +82,22 @@ set(lib_source_files ${lib_source_files}
 		     "src/Win/WinNetworkListenSocket.cpp"
 		     "src/Win/WinSocket.cpp")
 elseif(UNIX)
+set(BUILDTARGET "UNIX")
 set(lib_source_files ${lib_source_files}
 		     "src/Unix/UnixNetworkBasicSocket.cpp"
 		     "src/Unix/UnixNetworkConnectSocket.cpp"
 		     "src/Unix/UnixNetworkListenSocket.cpp"
 		     "src/Unix/UnixSocket.cpp")
 endif()
+
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+  "inc/Config.h.in"
+  "inc/Config.h"
+)
+
+include_directories("${CMAKE_CURRENT_BINARY_DIR}/inc/")
 
 file(
   GLOB_RECURSE
