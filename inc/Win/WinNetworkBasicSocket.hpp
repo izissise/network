@@ -39,6 +39,8 @@ public:
   size_t write(const Network::Buffer& data) override;
   void read(Network::Buffer& data, size_t size) override;
 
+  int getSockFd() const {return Socket::getSockFd();};
+
 protected:
   void updateInfo() override;
 

@@ -20,10 +20,23 @@ public:
     RAW
   };
 
+  enum class Event
+  {
+    READ,
+    WRITE,
+    RDWR
+  };
+
 public:
   virtual ~ISocket() = default;
 
   virtual void closeSocket() = 0;
+
+  void setEventRequest(Network::ISocket::Event ev) {_eventRequest = ev;};
+  Network::ISocket::Event getEventRequest() const {return _eventRequest;};
+
+protected:
+  Event _eventRequest;
 };
 
 };

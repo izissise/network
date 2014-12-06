@@ -32,12 +32,18 @@ public:
    * Accept a client
   **/
   virtual std::unique_ptr<ABasicSocket> acceptClient() = 0;
-  void setNewConnectionCallback(const std::function<void(const std::weak_ptr<Network::AListenSocket>& that)>& cb)
+
+  /**
+   * Callback when a new client connect through UDP
+   * it's callback will info returned by recvFrom
+  **/
+  void setNewConnectionCallback(const std::function<void(const std::weak_ptr<Network::AListenSocket>& that,
+                                const std::shared_ptr<Network::Identity>& id, const Network::Buffer& data)>& cb)
   {
-    _newConnectionCb = std::bind(cb, shared_from_this());
+    _newConnectionCb = std::bind(cb, shared_from_this(), std::placeholders::_1, std::placeholders::_2);
   };
 
-  const std::function<void()>& getNewConnectionCallback() const {return _newConnectionCb;};
+  const std::function<void(const std::shared_ptr<Network::Identity>& id, const Network::Buffer& data)>& getNewConnectionCallback() const {return _newConnectionCb;};
 
   /**
    * Udp clients helpers
@@ -46,7 +52,7 @@ public:
   virtual size_t sendTo(const Network::Identity& cli, const Network::Buffer& data) = 0;
 
 protected:
-  std::function<void()> _newConnectionCb;
+  std::function<void(const std::shared_ptr<Network::Identity>& id, const Network::Buffer& data)> _newConnectionCb;
 };
 
 };

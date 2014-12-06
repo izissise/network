@@ -12,6 +12,7 @@
 # include <arpa/inet.h>
 # include <fcntl.h>
 
+# include "ISocket.hpp"
 # include "ABasicSocket.hpp"
 # include "Unix/UnixSocket.hpp"
 
@@ -22,9 +23,9 @@ class BasicSocket : public Socket, public virtual ABasicSocket
 {
 public:
   BasicSocket(const std::string& ip,
-                           ISocket::SockType socktype = ISocket::SockType::TCP,
-                           const std::string& port = "",
-                           const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func = [](int sockfd, const struct sockaddr *addr, socklen_t addrlen){(void)sockfd; (void)addr; (void)addrlen;});
+              ISocket::SockType socktype = ISocket::SockType::TCP,
+              const std::string& port = "",
+  const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func = [](int sockfd, const struct sockaddr *addr, socklen_t addrlen) {(void)sockfd; (void)addr; (void)addrlen;});
 
   BasicSocket(int sockfd, ISocket::SockType socktype);
 
@@ -42,6 +43,8 @@ public:
 
   size_t write(const Network::Buffer& data) override;
   void read(Network::Buffer& data, size_t size) override;
+
+  int getSockFd() const {return Socket::getSockFd();};
 
 protected:
   void updateInfo() override;

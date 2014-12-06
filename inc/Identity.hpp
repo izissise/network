@@ -19,10 +19,11 @@ struct Identity
 
   ~Identity() = default;
 
-  bool operator==(const Identity&);
+  //bool operator==(const Identity&);
 
   std::string ip;
   uint16_t    port;
+
 
   std::function<void()> onReadeable;
   std::function<void()> onWritable;

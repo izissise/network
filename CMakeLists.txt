@@ -69,6 +69,7 @@ set(BUILDTARGET "Unknown")
 if (WIN32)
 set(BUILDTARGET "WIN32")
 set(lib_source_files ${lib_source_files}
+			 "src/Win/WinNetwork.cpp"
 		     "src/Win/WinNetworkBasicSocket.cpp"
 		     "src/Win/WinNetworkConnectSocket.cpp"
 		     "src/Win/WinNetworkListenSocket.cpp"
@@ -85,6 +86,7 @@ set(lib_source_files ${lib_source_files}
 		     "src/ring_buffer.c"
 		     "src/ring_buffer_fill.c"
 		     "src/select.c"
+		     "src/Unix/UnixNetwork.cpp"
 		     "src/Unix/UnixNetworkBasicSocket.cpp"
 		     "src/Unix/UnixNetworkConnectSocket.cpp"
 		     "src/Unix/UnixNetworkListenSocket.cpp"

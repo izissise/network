@@ -1,20 +1,27 @@
 #ifndef UNIXNETWORK_H
 # define UNIXNETWORK_H
 
+# include <sys/epoll.h>
+
 # include "ANetwork.hpp"
 
 namespace Network {
 namespace Unix {
 
-class Network
+class UnixNetwork : public ANetwork
 {
 public:
-  UnixNetwork();
+  UnixNetwork(size_t maxEvents = 50);
   virtual ~UnixNetwork();
 
-  void poll() override;
+  void registerClient(const std::weak_ptr<Network::ABasicSocket>& cli) override;
+  void registerListener(const std::weak_ptr<Network::AListenSocket>& listener) override;
+
+  void poll(bool block) override;
 protected:
   int _pollFd;
+  size_t _maxEvents;
+  struct epoll_event* _events;
 };
 };
 };

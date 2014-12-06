@@ -25,7 +25,7 @@ public:
   //Listening sockets
   virtual void registerListener(const std::weak_ptr<Network::AListenSocket>& listener);
 
-  virtual void poll() = 0;
+  virtual void poll(bool block = false) = 0;
 
 protected:
   std::deque<std::weak_ptr<Network::AListenSocket>> _listener;
