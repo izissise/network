@@ -12,13 +12,13 @@
 # include <arpa/inet.h>
 # include <fcntl.h>
 
-# include "IBasicSocket.hpp"
+# include "ABasicSocket.hpp"
 # include "Unix/UnixSocket.hpp"
 
 namespace Network {
 namespace Unix {
 
-class BasicSocket : public Socket, public virtual IBasicSocket
+class BasicSocket : public Socket, public virtual ABasicSocket
 {
 public:
   BasicSocket(const std::string& ip,

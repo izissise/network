@@ -1,14 +1,12 @@
-#ifndef SOCKETFACTORY_H
-# define SOCKETFACTORY_H
+#ifndef NETWORKFACTORY_H
+# define NETWORKFACTORY_H
 
 # include <memory>
 # include <string>
 
-# include "Singleton.hpp"
-
 # include "ISocket.hpp"
-# include "IListenSocket.hpp"
-# include "IBasicSocket.hpp"
+# include "AListenSocket.hpp"
+# include "ABasicSocket.hpp"
 
 # include "Config.h"
 # ifdef UNIX
@@ -25,18 +23,18 @@
 namespace Network
 {
 
-class SocketFactory : public Singleton<SocketFactory>
+class NetworkFactory
 {
 public:
-  SocketFactory() = default;
-  ~SocketFactory() = default;
+  NetworkFactory() = delete;
+  ~NetworkFactory() = delete;
 
-  std::unique_ptr<Network::IListenSocket> createListenSocket(const std::string& ip, const std::string& port,
+  static std::unique_ptr<Network::AListenSocket> createListenSocket(const std::string& ip, const std::string& port,
       Network::ISocket::SockType socktype = Network::ISocket::SockType::TCP, bool reuse = true);
-  std::unique_ptr<Network::IBasicSocket> createConnectSocket(const std::string& ip, const std::string& port,
+  static std::unique_ptr<Network::ABasicSocket> createConnectSocket(const std::string& ip, const std::string& port,
       Network::ISocket::SockType socktype = Network::ISocket::SockType::TCP, bool nonBlock = false);
   template<typename F1>
-  std::unique_ptr<Network::ISocket> createSocket(const std::string& ip, const std::string& port,
+  static std::unique_ptr<Network::ISocket> createSocket(const std::string& ip, const std::string& port,
       Network::ISocket::SockType socktype, F1 func)
   {
 #ifdef UNIX

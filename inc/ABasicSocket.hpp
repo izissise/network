@@ -1,18 +1,19 @@
 #ifndef INETWORKBASICSOCKET_H
 # define INETWORKBASICSOCKET_H
 
-# include <vector>
 # include <string>
+# include <functional>
+# include <memory>
 # include <cstdint>
 
 # include "ISocket.hpp"
 
 namespace Network {
 
-class IBasicSocket : virtual public ISocket
+class ABasicSocket : virtual public ISocket
 {
 public:
-  virtual ~IBasicSocket() = default;
+  virtual ~ABasicSocket() = default;
 
   /**
    * Can throw
@@ -38,6 +39,18 @@ public:
   virtual const std::string& getRemoteIpAddr() const = 0;
   virtual uint16_t getRemotePort() const = 0;
   virtual ISocket::SockType getSockType() const = 0;
+
+  /**
+   * Callback when readable or writable
+  **/
+  void setReadeableCallback(const std::function<void()>& cb) {_readeableCb = cb;};
+  void setWritableCallback(const std::function<void()>& cb) {_writableCb = cb;};
+  const std::function<void()>& getReadeableCallback() const {return _readeableCb;};
+  const std::function<void()>& setWritableCallback() const {return _writableCb;};
+
+protected:
+	std::function<void()> _readeableCb;
+	std::function<void()> _writableCb;
 };
 
 };

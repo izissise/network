@@ -24,25 +24,6 @@ public:
   virtual ~ISocket() = default;
 
   virtual void closeSocket() = 0;
-
-};
-
-struct Identity
-{
-  Identity(const std::string& Ip = "", uint16_t Port = 0)
-    : ip(Ip), port(Port)
-  {
-  };
-
-  Identity(const Identity&) = default;
-  Identity& operator=(const Identity&) = default;
-
-  ~Identity() = default;
-
-  bool operator==(const Identity&);
-
-  std::string ip;
-  uint16_t    port;
 };
 
 };

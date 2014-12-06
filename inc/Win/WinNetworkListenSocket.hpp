@@ -5,12 +5,12 @@
 # include <cstdint>
 
 # include "Win/WinSocket.hpp"
-# include "IListenSocket.hpp"
+# include "AListenSocket.hpp"
 
 namespace Network {
 namespace Win {
 
-class ListenSocket : public Socket, virtual public IListenSocket
+class ListenSocket : public Socket, virtual public AListenSocket
 {
 public:
   ListenSocket(const std::string& listeningIp, const std::string& port,
@@ -20,7 +20,7 @@ public:
 
   void closeSocket() override {Socket::closeSocket();};
 
-  std::unique_ptr<IBasicSocket> acceptClient() override;
+  std::unique_ptr<ABasicSocket> acceptClient() override;
 
   Network::Identity recvFrom(Network::Buffer& data, size_t size) override;
 

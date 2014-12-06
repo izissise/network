@@ -62,11 +62,19 @@ CURRENT_DATE(PROJECT_BUILD_DATE)
 
 # All source files
 set(lib_source_files "src/Error.cpp"
-		     "src/SocketFactory.cpp")
+					 "src/ANetwork.cpp"
+					 "src/NetworkFactory.cpp")
 
 set(BUILDTARGET "Unknown")
 if (WIN32)
 set(BUILDTARGET "WIN32")
+set(lib_source_files ${lib_source_files}
+		     "src/Win/WinNetworkBasicSocket.cpp"
+		     "src/Win/WinNetworkConnectSocket.cpp"
+		     "src/Win/WinNetworkListenSocket.cpp"
+		     "src/Win/WinSocket.cpp")
+elseif(UNIX)
+set(BUILDTARGET "UNIX")
 set(lib_source_files ${lib_source_files}
 		     "src/inet_accept.c"
 		     "src/inet_asynchronous_connect.c"
@@ -77,13 +85,6 @@ set(lib_source_files ${lib_source_files}
 		     "src/ring_buffer.c"
 		     "src/ring_buffer_fill.c"
 		     "src/select.c"
-		     "src/Win/WinNetworkBasicSocket.cpp"
-		     "src/Win/WinNetworkConnectSocket.cpp"
-		     "src/Win/WinNetworkListenSocket.cpp"
-		     "src/Win/WinSocket.cpp")
-elseif(UNIX)
-set(BUILDTARGET "UNIX")
-set(lib_source_files ${lib_source_files}
 		     "src/Unix/UnixNetworkBasicSocket.cpp"
 		     "src/Unix/UnixNetworkConnectSocket.cpp"
 		     "src/Unix/UnixNetworkListenSocket.cpp"

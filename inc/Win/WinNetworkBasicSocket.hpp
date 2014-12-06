@@ -8,13 +8,13 @@
 # include <ws2tcpip.h>
 # include <windows.h>
 
-# include "IBasicSocket.hpp"
+# include "ABasicSocket.hpp"
 # include "Win/WinSocket.hpp"
 
 namespace Network {
 namespace Win {
 
-class BasicSocket : public Socket, public virtual IBasicSocket
+class BasicSocket : public Socket, public virtual ABasicSocket
 {
 public:
   BasicSocket(const std::string& ip,
