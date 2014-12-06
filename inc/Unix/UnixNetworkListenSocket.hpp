@@ -16,7 +16,7 @@ class ListenSocket : public Socket, virtual public AListenSocket
 {
 public:
   ListenSocket(const std::string& listeningIp, const std::string& port,
-               ISocket::SockType socktype = ISocket::SockType::TCP,
+               ASocket::SockType socktype = ASocket::SockType::TCP,
                bool reuse = true);
   virtual ~ListenSocket() = default;
 
@@ -30,7 +30,7 @@ public:
 
   const std::string& getListeningIpAddr() const override {return _ip;};
   uint16_t getListeningPort() const override {return _port;};
-  ISocket::SockType getSockType() const override {return Socket::getSockType();};
+  ASocket::SockType getSockType() const override {return Socket::getSockType();};
 
 protected:
   static void bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);

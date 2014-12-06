@@ -6,12 +6,12 @@
 # include <functional>
 
 # include "Identity.hpp"
-# include "ISocket.hpp"
+# include "ASocket.hpp"
 # include "ABasicSocket.hpp"
 
 namespace Network {
 
-class AListenSocket : public std::enable_shared_from_this<AListenSocket>, virtual public ISocket
+class AListenSocket : public std::enable_shared_from_this<AListenSocket>, virtual public ASocket
 {
 public:
   virtual ~AListenSocket() = default;
@@ -26,7 +26,7 @@ public:
   **/
   virtual const std::string& getListeningIpAddr() const = 0;
   virtual uint16_t getListeningPort() const = 0;
-  virtual ISocket::SockType getSockType() const = 0;
+  virtual ASocket::SockType getSockType() const = 0;
 
   /**
    * Accept a client

@@ -6,14 +6,14 @@
 namespace Network {
 namespace Win {
 
-const std::map<ISocket::SockType, int> Socket::_socktypes = {
-  {ISocket::SockType::TCP, SOCK_STREAM},
-  {ISocket::SockType::UDP, SOCK_DGRAM},
-  {ISocket::SockType::RAW, SOCK_RAW}
+const std::map<ASocket::SockType, int> Socket::_socktypes = {
+  {ASocket::SockType::TCP, SOCK_STREAM},
+  {ASocket::SockType::UDP, SOCK_DGRAM},
+  {ASocket::SockType::RAW, SOCK_RAW}
 };
 
 Socket::Socket(const std::string& ip,
-               ISocket::SockType socktype,
+               ASocket::SockType socktype,
                const std::string& port,
                const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func)
   : _socket(-1), _socktype(socktype)
@@ -68,7 +68,7 @@ Socket::Socket(const std::string& ip,
     throw Error(strerror(errno));
 }
 
-Socket::Socket(int sockfd, ISocket::SockType socktype)
+Socket::Socket(int sockfd, ASocket::SockType socktype)
   : _socket(sockfd), _socktype(socktype)
 {
 }
@@ -122,9 +122,9 @@ uint16_t Socket::portNumber(const struct sockaddr_storage& addr)
   return ntohs(port);
 }
 
-ISocket::SockType Socket::intToSockType(int t)
+ASocket::SockType Socket::intToSockType(int t)
 {
-  auto it = std::find_if(_socktypes.begin(), _socktypes.end(), [t](const std::pair<ISocket::SockType, int>& p) {
+  auto it = std::find_if(_socktypes.begin(), _socktypes.end(), [t](const std::pair<ASocket::SockType, int>& p) {
     return p.second == t;
   });
   if (it == _socktypes.end())
@@ -132,7 +132,7 @@ ISocket::SockType Socket::intToSockType(int t)
   return it->first;
 }
 
-int Socket::sockTypeToInt(ISocket::SockType t)
+int Socket::sockTypeToInt(ASocket::SockType t)
 {
   return _socktypes.at(t);
 }

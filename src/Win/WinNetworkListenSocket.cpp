@@ -8,11 +8,11 @@ namespace Network {
 namespace Win {
 
 ListenSocket::ListenSocket(const std::string& listeningIp, const std::string& port,
-                           ISocket::SockType socktype,
+                           ASocket::SockType socktype,
                            bool reuse)
   : Socket::Socket(listeningIp, socktype, port, reuse ? &ListenSocket::bindReuse : &ListenSocket::bind)
 {
-  if (socktype == ISocket::SockType::TCP)
+  if (socktype == ASocket::SockType::TCP)
     ::listen(_socket, 50);
   updateInfo();
 }
@@ -27,7 +27,7 @@ void ListenSocket::updateInfo()
 
 std::unique_ptr<IBasicSocket> ListenSocket::acceptClient()
 {
-  if (_socktype != ISocket::SockType::TCP)
+  if (_socktype != ASocket::SockType::TCP)
     throw std::runtime_error("acceptClient not implemented for non TCP socket.");
 
   int newfd = ::accept(_socket, nullptr, nullptr);
@@ -38,7 +38,7 @@ std::unique_ptr<IBasicSocket> ListenSocket::acceptClient()
 
 Network::Identity ListenSocket::recvFrom(Network::Buffer& data, size_t size)
 {
-  if (_socktype != ISocket::SockType::UDP)
+  if (_socktype != ASocket::SockType::UDP)
     throw std::runtime_error("recvFrom not implemented for non UDP socket.");
 
   int 						ret;
@@ -58,7 +58,7 @@ Network::Identity ListenSocket::recvFrom(Network::Buffer& data, size_t size)
 
 size_t ListenSocket::sendTo(const Network::Identity &cli, const Network::Buffer& data)
 {
-  if (_socktype != ISocket::SockType::UDP)
+  if (_socktype != ASocket::SockType::UDP)
     throw std::runtime_error("sendTo not implemented for non UDP socket.");
 
   int 						ret;

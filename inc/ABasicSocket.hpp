@@ -6,11 +6,11 @@
 # include <memory>
 # include <cstdint>
 
-# include "ISocket.hpp"
+# include "ASocket.hpp"
 
 namespace Network {
 
-class ABasicSocket : virtual public ISocket
+class ABasicSocket : virtual public ASocket
 {
 public:
   virtual ~ABasicSocket() = default;
@@ -38,7 +38,7 @@ public:
   virtual uint16_t getPort() const = 0;
   virtual const std::string& getRemoteIpAddr() const = 0;
   virtual uint16_t getRemotePort() const = 0;
-  virtual ISocket::SockType getSockType() const = 0;
+  virtual ASocket::SockType getSockType() const = 0;
 
   /**
    * Callback when readable or writable

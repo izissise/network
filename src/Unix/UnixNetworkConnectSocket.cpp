@@ -4,7 +4,7 @@ namespace Network {
 namespace Unix {
 
 ConnectSocket::ConnectSocket(const std::string& ip, const std::string& port,
-    ISocket::SockType socktype,
+    ASocket::SockType socktype,
     bool nonBlock)
   : BasicSocket::BasicSocket(ip, socktype, port,
       nonBlock ? &ConnectSocket::connectNonBlock : &ConnectSocket::connect)

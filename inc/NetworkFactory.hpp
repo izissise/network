@@ -4,7 +4,7 @@
 # include <memory>
 # include <string>
 
-# include "ISocket.hpp"
+# include "ASocket.hpp"
 # include "AListenSocket.hpp"
 # include "ABasicSocket.hpp"
 
@@ -30,18 +30,18 @@ public:
   ~NetworkFactory() = delete;
 
   static std::unique_ptr<Network::AListenSocket> createListenSocket(const std::string& ip, const std::string& port,
-      Network::ISocket::SockType socktype = Network::ISocket::SockType::TCP, bool reuse = true);
+      Network::ASocket::SockType socktype = Network::ASocket::SockType::TCP, bool reuse = true);
   static std::unique_ptr<Network::ABasicSocket> createConnectSocket(const std::string& ip, const std::string& port,
-      Network::ISocket::SockType socktype = Network::ISocket::SockType::TCP, bool nonBlock = false);
+      Network::ASocket::SockType socktype = Network::ASocket::SockType::TCP, bool nonBlock = false);
   template<typename F1>
-  static std::unique_ptr<Network::ISocket> createSocket(const std::string& ip, const std::string& port,
-      Network::ISocket::SockType socktype, F1 func)
+  static std::unique_ptr<Network::ASocket> createSocket(const std::string& ip, const std::string& port,
+      Network::ASocket::SockType socktype, F1 func)
   {
 #ifdef UNIX
-    return std::unique_ptr<Network::ISocket>(new Unix::Socket(ip, port, socktype, func));
+    return std::unique_ptr<Network::ASocket>(new Unix::Socket(ip, port, socktype, func));
 #endif
 #ifdef WIN32
-    return std::unique_ptr<Network::ISocket>(new Win::Socket(ip, port, socktype, func));
+    return std::unique_ptr<Network::ASocket>(new Win::Socket(ip, port, socktype, func));
 #endif
   };
 

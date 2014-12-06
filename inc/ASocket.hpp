@@ -10,7 +10,7 @@ namespace Network {
 
 typedef std::string Buffer;
 
-class ISocket
+class ASocket
 {
 public:
   enum class SockType
@@ -28,12 +28,12 @@ public:
   };
 
 public:
-  virtual ~ISocket() = default;
+  virtual ~ASocket() = default;
 
   virtual void closeSocket() = 0;
 
-  void setEventRequest(Network::ISocket::Event ev) {_eventRequest = ev;};
-  Network::ISocket::Event getEventRequest() const {return _eventRequest;};
+  void setEventRequest(Network::ASocket::Event ev) {_eventRequest = ev;};
+  Network::ASocket::Event getEventRequest() const {return _eventRequest;};
 
 protected:
   Event _eventRequest;
