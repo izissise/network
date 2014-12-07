@@ -56,7 +56,7 @@ public:
   const std::function<void()>& getAcceptorCallback() const {return _acceptorCb;};
 
   /**
-   * Udp clients helpers
+   * UDP clients helpers
   **/
   virtual Network::Identity recvFrom(Network::Buffer& data, size_t size) = 0;
   virtual size_t sendTo(const Network::Identity& cli, const Network::Buffer& data) = 0;
