@@ -5,6 +5,8 @@
 # include <cstring>
 # include <functional>
 
+# include "ASocket.hpp"
+
 namespace Network {
 
 struct Identity
@@ -19,14 +21,15 @@ struct Identity
 
   ~Identity() = default;
 
-  //bool operator==(const Identity&);
+  bool operator==(const Identity& id)
+  {
+    return (ip == id.ip && port == id.port);
+  }
 
   std::string ip;
   uint16_t    port;
 
-
-  std::function<void()> onReadeable;
-  std::function<void()> onWritable;
+  std::function<void(const Network::Buffer& data)> onRead;
 };
 };
 

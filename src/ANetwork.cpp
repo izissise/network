@@ -17,4 +17,9 @@ void ANetwork::registerListener(const std::weak_ptr<Network::AListenSocket>& lis
   _listener.push_front(listener);
 }
 
+void ANetwork::autoAccept(const std::shared_ptr<Network::AListenSocket>& listener)
+{
+  listener->acceptClient();
+}
+
 };

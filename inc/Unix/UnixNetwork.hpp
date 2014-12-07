@@ -11,13 +11,19 @@ namespace Unix {
 class UnixNetwork : public ANetwork
 {
 public:
-  UnixNetwork(size_t maxEvents = 50);
+  UnixNetwork(size_t recvFromSize = 10, size_t maxEvents = 50);
   virtual ~UnixNetwork();
 
   void registerClient(const std::weak_ptr<Network::ABasicSocket>& cli) override;
   void registerListener(const std::weak_ptr<Network::AListenSocket>& listener) override;
 
   void poll(bool block) override;
+
+protected:
+ void updateRequest();
+ void dispatchEvent(struct epoll_event* ev);
+ bool dispatchUdpEvent(void* ptr, const Network::Buffer& data);
+
 protected:
   int _pollFd;
   size_t _maxEvents;

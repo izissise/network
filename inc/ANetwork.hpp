@@ -4,6 +4,7 @@
 # include <memory>
 # include <map>
 # include <deque>
+# include <algorithm>
 
 # include "Identity.hpp"
 # include "AListenSocket.hpp"
@@ -13,7 +14,7 @@ namespace Network {
 class ANetwork
 {
 public:
-  ANetwork() = default;
+  ANetwork(size_t recvfSize = 10) : _recvfSize(recvfSize) {};
   virtual ~ANetwork() = default;
 
   //UDP clients
@@ -28,9 +29,13 @@ public:
   virtual void poll(bool block = false) = 0;
 
 protected:
+  void autoAccept(const std::shared_ptr<Network::AListenSocket>& listener);
+
+protected:
   std::deque<std::weak_ptr<Network::AListenSocket>> _listener;
   std::deque<std::weak_ptr<Network::Identity>> _identities;
   std::deque<std::weak_ptr<Network::ABasicSocket>> _clients;
+  size_t _recvfSize;
 };
 };
 

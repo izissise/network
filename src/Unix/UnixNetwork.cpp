@@ -14,8 +14,8 @@
 namespace Network {
 namespace Unix {
 
-UnixNetwork::UnixNetwork(size_t maxEvents)
-  : _maxEvents(maxEvents)
+UnixNetwork::UnixNetwork(size_t recvFromSize, size_t maxEvents)
+  : ANetwork::ANetwork(recvFromSize), _maxEvents(maxEvents)
 {
   _events = new struct epoll_event[_maxEvents];
   _pollFd = epoll_create1(0);
@@ -25,6 +25,7 @@ UnixNetwork::UnixNetwork(size_t maxEvents)
 
 UnixNetwork::~UnixNetwork()
 {
+  delete[] _events;
   close(_pollFd);
 }
 
@@ -59,16 +60,110 @@ void UnixNetwork::registerListener(const std::weak_ptr<Network::AListenSocket>& 
   ANetwork::registerListener(listener);
 }
 
+void UnixNetwork::updateRequest()
+{
+  auto epupdate = [this](int fd, Network::ASocket::Event req, void* data) {
+    struct epoll_event ev;
+    std::memset(&ev, 0, sizeof(decltype(ev)));
+    ev.data.ptr = data;
+    ev.events = ((req == ASocket::Event::READ) ? EPOLLIN :
+                 ((req == ASocket::Event::WRITE) ? EPOLLOUT :
+                  ((req == ASocket::Event::WRITE) ? (EPOLLIN | EPOLLOUT) : 0)));
+    epoll_ctl(_pollFd, EPOLL_CTL_MOD, fd, &ev);
+  };
+
+  _listener.erase(std::remove_if(_listener.begin(), _listener.end(),
+  [&epupdate](std::weak_ptr<AListenSocket>& li) -> bool {
+    std::shared_ptr<ListenSocket> sock = std::dynamic_pointer_cast<ListenSocket>(li.lock());
+    if (!sock)
+      return true;
+    Network::ASocket::Event req = sock->getEventRequest();
+    epupdate(sock->getSockFd(), req, sock.get());
+    return false;
+  }), _listener.end());
+
+
+  _clients.erase(std::remove_if(_clients.begin(), _clients.end(),
+  [&epupdate](std::weak_ptr<ABasicSocket>& cl) -> bool {
+    std::shared_ptr<BasicSocket> sock = std::dynamic_pointer_cast<BasicSocket>(cl.lock());
+    if (!sock)
+      return true;
+    Network::ASocket::Event req = sock->getEventRequest();
+    epupdate(sock->getSockFd(), req, sock.get());
+    return false;
+  }), _clients.end());
+}
+
+bool UnixNetwork::dispatchUdpEvent(void* ptr, const Network::Buffer& data)
+{
+  bool handled = false;
+
+  _identities.erase(std::remove_if(_identities.begin(), _identities.end(),
+  [ptr, &handled, &data](std::weak_ptr<Network::Identity>& cl) -> bool {
+    std::shared_ptr<Network::Identity> id = cl.lock();
+    if (!id)
+      return true;
+    if (id.get() == ptr)
+      id->onRead(data);
+    return false;
+  }), _identities.end());
+
+  return handled;
+}
+
+void UnixNetwork::dispatchEvent(struct epoll_event* ev)
+{
+  void* ptr = ev->data.ptr;
+  bool handled = false;
+
+  for (auto& li : _listener)
+    {
+      std::shared_ptr<AListenSocket> sock(li.lock());
+      if (sock && (sock.get() == ptr))
+        {
+          handled = true;
+          if (ev->events & EPOLLIN)
+            {
+              if (sock->getSockType() == ASocket::SockType::TCP)
+                sock->getAcceptorCallback()();
+              else if (sock->getSockType() == ASocket::SockType::UDP)
+                {
+                  Network::Buffer data;
+                  if (!dispatchUdpEvent(ptr, data))
+                    {
+                      std::shared_ptr<Identity> identity(new Identity(sock->recvFrom(data, _recvfSize)));
+                      sock->getNewConnectionCallback()(identity, data);
+                    }
+                }
+            }
+        }
+    }
+
+  if (handled)
+    return;
+
+  for (auto& cli : _clients)
+    {
+      std::shared_ptr<ABasicSocket> sock(cli.lock());
+      if (sock && (sock.get() == ptr))
+        {
+          handled = true;
+          if (ev->events & EPOLLIN)
+            sock->getReadeableCallback()();
+          else if (ev->events & EPOLLOUT)
+            sock->getWritableCallback()();
+        }
+    }
+}
+
 void UnixNetwork::poll(bool block)
 {
-//check there and update epoll_event
+  updateRequest();
   int ret = epoll_wait(_pollFd, _events, _maxEvents, block ? -1 : 0);
   if (ret == -1)
     throw std::runtime_error("epoll_wait");
   for (int i = 0; i < ret; ++i)
-    {
-    //  _events[i].events
-    }
+    dispatchEvent(&(_events[i]));
 }
 
 };

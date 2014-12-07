@@ -46,7 +46,7 @@ public:
   void setReadeableCallback(const std::function<void()>& cb) {_readeableCb = cb;};
   void setWritableCallback(const std::function<void()>& cb) {_writableCb = cb;};
   const std::function<void()>& getReadeableCallback() const {return _readeableCb;};
-  const std::function<void()>& setWritableCallback() const {return _writableCb;};
+  const std::function<void()>& getWritableCallback() const {return _writableCb;};
 
 protected:
 	std::function<void()> _readeableCb;
