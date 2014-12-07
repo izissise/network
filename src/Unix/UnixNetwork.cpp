@@ -38,6 +38,7 @@ void UnixNetwork::registerClient(const std::weak_ptr<Network::ABasicSocket>& cli
     throw std::runtime_error("UnixNetwork::registerClient");
 
   std::memset(&ev, 0, sizeof(decltype(ev)));
+  ev.data.ptr = (cli.lock()).get();
   int ret = epoll_ctl(_pollFd, EPOLL_CTL_ADD, uBasicSock->getSockFd(), &ev);
   if (ret == -1)
     throw Network::Error(std::string("epoll_ctl") + strerror(errno));
@@ -54,12 +55,12 @@ void UnixNetwork::registerListener(const std::weak_ptr<Network::AListenSocket>& 
 
   std::memset(&ev, 0, sizeof(decltype(ev)));
   ev.events = EPOLLIN;
+  ev.data.ptr = (listener.lock()).get();
   int ret = epoll_ctl(_pollFd, EPOLL_CTL_ADD, uListSock->getSockFd(), &ev);
   if (ret == -1)
     throw Network::Error(std::string("epoll_ctl") + strerror(errno));
   ANetwork::registerListener(listener);
 }
-
 void UnixNetwork::updateRequest()
 {
   auto epupdate = [this](int fd, Network::ASocket::Event req, void* data) {
@@ -78,7 +79,7 @@ void UnixNetwork::updateRequest()
     if (!sock)
       return true;
     Network::ASocket::Event req = sock->getEventRequest();
-    epupdate(sock->getSockFd(), req, sock.get());
+    epupdate(sock->getSockFd(), req, (li.lock()).get());
     return false;
   }), _listener.end());
 
@@ -89,22 +90,25 @@ void UnixNetwork::updateRequest()
     if (!sock)
       return true;
     Network::ASocket::Event req = sock->getEventRequest();
-    epupdate(sock->getSockFd(), req, sock.get());
+    epupdate(sock->getSockFd(), req, (cl.lock()).get());
     return false;
   }), _clients.end());
 }
 
-bool UnixNetwork::dispatchUdpEvent(void* ptr, const Network::Buffer& data)
+bool UnixNetwork::dispatchUdpEvent(const Network::Identity& idCheck, const Network::Buffer& data)
 {
   bool handled = false;
 
   _identities.erase(std::remove_if(_identities.begin(), _identities.end(),
-  [ptr, &handled, &data](std::weak_ptr<Network::Identity>& cl) -> bool {
+  [&idCheck, &handled, &data](std::weak_ptr<Network::Identity>& cl) -> bool {
     std::shared_ptr<Network::Identity> id = cl.lock();
     if (!id)
       return true;
-    if (id.get() == ptr)
-      id->onRead(data);
+    if ((*id) == idCheck)
+      {
+        handled = true;
+        id->onRead(data);
+      }
     return false;
   }), _identities.end());
 
@@ -129,10 +133,11 @@ void UnixNetwork::dispatchEvent(struct epoll_event* ev)
               else if (sock->getSockType() == ASocket::SockType::UDP)
                 {
                   Network::Buffer data;
-                  if (!dispatchUdpEvent(ptr, data))
+                  Identity identity(sock->recvFrom(data, _recvfSize));
+                  if (!dispatchUdpEvent(identity, data))
                     {
-                      std::shared_ptr<Identity> identity(new Identity(sock->recvFrom(data, _recvfSize)));
-                      sock->getNewConnectionCallback()(identity, data);
+                      std::shared_ptr<Identity> nid(new Identity(identity));
+                      sock->getNewConnectionCallback()(nid, data);
                     }
                 }
             }

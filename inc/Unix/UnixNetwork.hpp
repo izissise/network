@@ -22,7 +22,7 @@ public:
 protected:
  void updateRequest();
  void dispatchEvent(struct epoll_event* ev);
- bool dispatchUdpEvent(void* ptr, const Network::Buffer& data);
+ bool dispatchUdpEvent(const Network::Identity& idCheck, const Network::Buffer& data);
 
 protected:
   int _pollFd;
