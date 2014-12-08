@@ -57,7 +57,6 @@ public:
     return std::unique_ptr<Network::ANetwork>(new Win::WinNetwork());
 #endif
   };
-
 };
 };
 

@@ -1,0 +1,12 @@
+# Tell the user project where to find our headers and libraries
+set(NETWORKLIB_INCLUDE_DIRS "@CONFIG_HEADER_PATH@")
+set(NETWORKLIB_LIBRARY_DIRS "@CONFIG_LIBRARY_PATH@")
+
+# Our library dependencies
+include("@CONFIG_LIBRARY_PATH@/NetworkLibLibraryDepends.cmake")
+
+# Defines
+set(NETWORKLIB_DEFINITIONS "@CONFIG_DEFINITIONS@")
+
+# USE file
+set(NETWORKLIB_USE_FILE "@CONFIG_USE_FILE_PATH@/NetworkLibUse.cmake")

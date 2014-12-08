@@ -39,7 +39,7 @@ OPTION(GENERATE_DOC "Decide if documentation should be generated." OFF)
 # --- global compiler flags ---
 if (UNIX)
   COMPILER_FLAGS(FLAGS "-pipe" "-Wall" "-Wextra"
-			   "--std=c++1y"
+			   "--std=c++11"
 			   "-Wchar-subscripts" "-Winit-self" "-Wswitch-enum"
 			   "-Wstrict-aliasing=3"
 			   "-Wundef" "-Wno-endif-labels"
@@ -100,7 +100,7 @@ configure_file (
   "inc/Config.h"
 )
 
-include_directories("${CMAKE_CURRENT_BINARY_DIR}/inc/")
+include_directories("${CMAKE_CURRENT_BINARY_DIR}/inc")
 
 file(
   GLOB_RECURSE
@@ -116,6 +116,17 @@ add_library(
 # source files
   ${lib_source_files}
   ${lib_include_files}
+)
+
+set_target_properties(${NAME_LIB} PROPERTIES
+   PUBLIC_HEADER "${lib_include_files}"
+)
+   
+install(TARGETS ${NAME_LIB}
+   LIBRARY DESTINATION lib COMPONENT shlibs
+   RUNTIME DESTINATION bin COMPONENT shlibs
+   ARCHIVE DESTINATION lib COMPONENT dev
+   PUBLIC_HEADER DESTINATION include COMPONENT dev
 )
 
 file(
@@ -185,4 +196,45 @@ if(GENERATE_DOC)
                         VERSION "${PROJECTVERSION}")
 endif()
 
+# Export library dependencies
+#############################
+export(TARGETS ${NAME_LIB}
+   NAMESPACE NETWORKLIB_
+   FILE ${CMAKE_BINARY_DIR}/NetworkLibLibraryDepends.cmake
+)
 
+# create NetworkLibConfig.cmake for the build tree
+#########################################
+# SET TO THE PREPROCESSOR FLAGS REQUIRED TO USE PROJECT NetworkLib
+set(CONFIG_DEFINITIONS)
+# SET TO WHATEVER INCLUDE PATH IS REQUIRED TO USE NetworkLib'S BINARY TREE
+set(CONFIG_HEADER_PATH "${CMAKE_SOURCE_DIR}/inc" "${CMAKE_CURRENT_BINARY_DIR}/inc")
+# SET TO WHATEVER LIBRARY PATH IS REQUIRED TO USE NetworkLib'S BINARY TREE
+set(CONFIG_LIBRARY_PATH "${CMAKE_CURRENT_BINARY_DIR}")
+
+set(CONFIG_USE_FILE_PATH ${CMAKE_SOURCE_DIR})
+configure_file(
+   ${CMAKE_SOURCE_DIR}/cmake/NetworkLibConfig.cmake.in
+   ${CMAKE_BINARY_DIR}/NetworkLibConfig.cmake
+   @ONLY
+)
+
+# create NetworkLibConfig.cmake for the install tree
+###########################################
+set(CONFIG_HEADER_PATH "${CMAKE_INSTALL_PREFIX}/include")
+set(CONFIG_LIBRARY_PATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CONFIG_USE_FILE_PATH "${CMAKE_INSTALL_PREFIX}/share/cmake/NetworkLib" )
+configure_file(
+   ${CMAKE_SOURCE_DIR}/cmake/NetworkLibConfig.cmake.in
+   ${CMAKE_BINARY_DIR}/InstallFiles/NetworkLibConfig.cmake
+   @ONLY
+)
+   
+# install the CMake config files
+################################
+install(FILES
+   "${CMAKE_BINARY_DIR}/InstallFiles/NetworkLibConfig.cmake"
+   "${CMAKE_BINARY_DIR}/NetworkLibBuildSettings.cmake"
+   DESTINATION share/cmake/NetworkLib
+   COMPONENT dev
+)
