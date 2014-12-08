@@ -29,7 +29,8 @@ public:
   virtual void poll(bool block = false) = 0;
 
 protected:
-  void autoAccept(const std::shared_ptr<Network::AListenSocket>& listener);
+  void dispatchListenerReadEv(const std::shared_ptr<AListenSocket>& listener);
+  bool dispatchUdpEvent(const Network::Identity& idCheck, const Network::Buffer& data);
 
 protected:
   std::deque<std::weak_ptr<Network::AListenSocket>> _listener;

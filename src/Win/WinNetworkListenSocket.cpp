@@ -25,7 +25,7 @@ void ListenSocket::updateInfo()
   _port = portNumber(_addr);
 }
 
-std::unique_ptr<IBasicSocket> ListenSocket::acceptClient()
+std::unique_ptr<ABasicSocket> ListenSocket::acceptClient()
 {
   if (_socktype != ASocket::SockType::TCP)
     throw std::runtime_error("acceptClient not implemented for non TCP socket.");
@@ -33,7 +33,7 @@ std::unique_ptr<IBasicSocket> ListenSocket::acceptClient()
   int newfd = ::accept(_socket, nullptr, nullptr);
   if (newfd == -1)
     throw Error(strerror(errno));
-  return std::unique_ptr<IBasicSocket>(new BasicSocket(newfd, _socktype));
+  return std::unique_ptr<ABasicSocket>(new BasicSocket(newfd, _socktype));
 }
 
 Network::Identity ListenSocket::recvFrom(Network::Buffer& data, size_t size)

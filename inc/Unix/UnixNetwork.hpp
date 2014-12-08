@@ -20,9 +20,8 @@ public:
   void poll(bool block) override;
 
 protected:
- void updateRequest();
- void dispatchEvent(struct epoll_event* ev);
- bool dispatchUdpEvent(const Network::Identity& idCheck, const Network::Buffer& data);
+  void updateRequest();
+  void dispatchEvent(struct epoll_event* ev);
 
 protected:
   int _pollFd;
