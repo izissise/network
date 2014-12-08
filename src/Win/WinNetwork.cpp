@@ -14,10 +14,17 @@ WinNetwork::WinNetwork(size_t recvFromSize)
   : ANetwork::ANetwork(recvFromSize)
 {
   _maxFd = 0;
+  // Initialize Winsock
+  WSADATA wsaData;
+  int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+  if (iResult != 0)
+    throw Network::Error("WSAStartup failed");
+
 }
 
 WinNetwork::~WinNetwork()
 {
+  WSACleanup();
 }
 
 void WinNetwork::setFdSet()

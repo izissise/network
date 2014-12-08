@@ -11,7 +11,7 @@ class Error : public std::runtime_error
 {
 	public:
 		Error(const std::string& err) throw();
-		virtual ~Error() throw() = default;
+		virtual ~Error() throw() {};
 };
 
 };
