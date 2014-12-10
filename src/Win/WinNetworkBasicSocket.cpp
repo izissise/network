@@ -9,13 +9,13 @@ BasicSocket::BasicSocket(const std::string& ip,
                          ASocket::SockType socktype,
                          const std::string& port,
                          const std::function<void(int sockfd, const struct sockaddr *addr, socklen_t addrlen)>& func)
-  : Socket::Socket(ip, socktype, port, func), _connected(false)
+  : Socket(ip, socktype, port, func), _connected(false)
 {
   updateInfo();
 }
 
 BasicSocket::BasicSocket(int sockfd, ASocket::SockType socktype)
-  : Socket::Socket(sockfd, socktype), _connected(true)
+  : Socket(sockfd, socktype), _connected(true)
 {
   updateInfo();
 }

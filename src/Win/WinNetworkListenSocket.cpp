@@ -10,7 +10,7 @@ namespace Win {
 ListenSocket::ListenSocket(const std::string& listeningIp, const std::string& port,
                            ASocket::SockType socktype,
                            bool reuse)
-  : Socket::Socket(listeningIp, socktype, port, reuse ? &ListenSocket::bindReuse : &ListenSocket::bind)
+  : Socket(listeningIp, socktype, port, reuse ? &ListenSocket::bindReuse : &ListenSocket::bind)
 {
   if (socktype == ASocket::SockType::TCP)
     ::listen(_socket, 50);

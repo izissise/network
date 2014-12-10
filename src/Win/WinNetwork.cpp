@@ -11,7 +11,7 @@ namespace Network {
 namespace Win {
 
 WinNetwork::WinNetwork(size_t recvFromSize)
-  : ANetwork::ANetwork(recvFromSize)
+  : ANetwork(recvFromSize)
 {
   _maxFd = 0;
   // Initialize Winsock

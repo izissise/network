@@ -6,7 +6,7 @@ namespace Win {
 ConnectSocket::ConnectSocket(const std::string& ip, const std::string& port,
     ASocket::SockType socktype,
     bool nonBlock)
-  : BasicSocket::BasicSocket(ip, socktype, port,
+  : BasicSocket(ip, socktype, port,
       nonBlock ? &ConnectSocket::connectNonBlock : &ConnectSocket::connect)
 {
   if (!nonBlock)
