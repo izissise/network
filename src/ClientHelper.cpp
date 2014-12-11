@@ -33,7 +33,10 @@ void SocketClientHelper::onReadeable()
       _connected = false;
     }
   if (!_connected)
-    _socket->setEventRequest(Network::ASocket::Event::NONE);
+    {
+      _socket->setEventRequest(Network::ASocket::Event::NONE);
+      _socket->closeSocket();
+    }
 }
 
 void SocketClientHelper::onWritable()
@@ -58,7 +61,10 @@ void SocketClientHelper::onWritable()
       _writeBuff.rollbackReadBuffer(size);
     }
   if (!_connected)
-    _socket->setEventRequest(Network::ASocket::Event::NONE);
+    {
+      _socket->setEventRequest(Network::ASocket::Event::NONE);
+      _socket->closeSocket();
+    }
 }
 
 IdentityClientHelper::IdentityClientHelper(const std::shared_ptr<Network::Identity>& id,
