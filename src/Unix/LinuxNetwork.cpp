@@ -1,4 +1,4 @@
-#include "Unix/UnixNetwork.hpp"
+#include "Unix/LinuxNetwork.hpp"
 
 #include <exception>
 #include <stdexcept>
@@ -14,7 +14,7 @@
 namespace Network {
 namespace Unix {
 
-UnixNetwork::UnixNetwork(size_t recvFromSize, size_t maxEvents)
+LinuxNetwork::LinuxNetwork(size_t recvFromSize, size_t maxEvents)
   : ANetwork::ANetwork(recvFromSize), _maxEvents(maxEvents)
 {
   _events = new struct epoll_event[_maxEvents];
@@ -23,19 +23,19 @@ UnixNetwork::UnixNetwork(size_t recvFromSize, size_t maxEvents)
     throw Network::Error(std::string("epoll") + strerror(errno));
 }
 
-UnixNetwork::~UnixNetwork()
+LinuxNetwork::~LinuxNetwork()
 {
   delete[] _events;
   close(_pollFd);
 }
 
-void UnixNetwork::registerClient(const std::weak_ptr<Network::ABasicSocket>& cli)
+void LinuxNetwork::registerClient(const std::weak_ptr<Network::ABasicSocket>& cli)
 {
   std::shared_ptr<BasicSocket> uBasicSock = std::dynamic_pointer_cast<BasicSocket>(cli.lock());
   struct epoll_event ev;
 
   if (!uBasicSock)
-    throw std::runtime_error("UnixNetwork::registerClient");
+    throw std::runtime_error("LinuxNetwork::registerClient");
 
   std::memset(&ev, 0, sizeof(decltype(ev)));
   ev.data.ptr = (cli.lock()).get();
@@ -45,13 +45,13 @@ void UnixNetwork::registerClient(const std::weak_ptr<Network::ABasicSocket>& cli
   ANetwork::registerClient(cli);
 }
 
-void UnixNetwork::registerListener(const std::weak_ptr<Network::AListenSocket>& listener)
+void LinuxNetwork::registerListener(const std::weak_ptr<Network::AListenSocket>& listener)
 {
   std::shared_ptr<ListenSocket> uListSock = std::dynamic_pointer_cast<ListenSocket>(listener.lock());
   struct epoll_event ev;
 
   if (!uListSock)
-    throw std::runtime_error("UnixNetwork::registerListener");
+    throw std::runtime_error("LinuxNetwork::registerListener");
 
   std::memset(&ev, 0, sizeof(decltype(ev)));
   ev.events = EPOLLIN;
@@ -61,7 +61,7 @@ void UnixNetwork::registerListener(const std::weak_ptr<Network::AListenSocket>& 
     throw Network::Error(std::string("epoll_ctl") + strerror(errno));
   ANetwork::registerListener(listener);
 }
-void UnixNetwork::updateRequest()
+void LinuxNetwork::updateRequest()
 {
   auto epupdate = [this](int fd, Network::ASocket::Event req, void* data) {
     struct epoll_event ev;
@@ -95,7 +95,7 @@ void UnixNetwork::updateRequest()
   }), _clients.end());
 }
 
-void UnixNetwork::dispatchEvent(struct epoll_event* ev)
+void LinuxNetwork::dispatchEvent(struct epoll_event* ev)
 {
   void* ptr = ev->data.ptr;
   bool handled = false;
@@ -128,7 +128,7 @@ void UnixNetwork::dispatchEvent(struct epoll_event* ev)
     }
 }
 
-void UnixNetwork::poll(bool block)
+void LinuxNetwork::poll(bool block)
 {
   updateRequest();
   int ret = epoll_wait(_pollFd, _events, _maxEvents, block ? -1 : 0);

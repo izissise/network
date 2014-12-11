@@ -86,11 +86,17 @@ set(lib_source_files ${lib_source_files}
 		     "src/ring_buffer.c"
 		     "src/ring_buffer_fill.c"
 		     "src/select.c"
-		     "src/Unix/UnixNetwork.cpp"
 		     "src/Unix/UnixNetworkBasicSocket.cpp"
 		     "src/Unix/UnixNetworkConnectSocket.cpp"
 		     "src/Unix/UnixNetworkListenSocket.cpp"
 		     "src/Unix/UnixSocket.cpp")
+
+    if (APPLE)
+	 set(BUILDTARGET "APPLE")
+     set(lib_source_files ${lib_source_files} "src/Unix/BsdNetwork.cpp")
+    else()
+     set(lib_source_files ${lib_source_files} "src/Unix/LinuxNetwork.cpp")
+	endif()
 endif()
 
 # configure a header file to pass some of the CMake settings
@@ -121,7 +127,7 @@ add_library(
 set_target_properties(${NAME_LIB} PROPERTIES
    PUBLIC_HEADER "${lib_include_files}"
 )
-   
+
 install(TARGETS ${NAME_LIB}
    LIBRARY DESTINATION lib COMPONENT shlibs
    RUNTIME DESTINATION bin COMPONENT shlibs
@@ -229,7 +235,7 @@ configure_file(
    ${CMAKE_BINARY_DIR}/InstallFiles/NetworkLibConfig.cmake
    @ONLY
 )
-   
+
 # install the CMake config files
 ################################
 install(FILES

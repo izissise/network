@@ -1,5 +1,5 @@
-#ifndef UNIXNETWORK_H
-# define UNIXNETWORK_H
+#ifndef LUNIXNETWORK_H
+# define LUNIXNETWORK_H
 
 # include <sys/epoll.h>
 
@@ -8,11 +8,11 @@
 namespace Network {
 namespace Unix {
 
-class UnixNetwork : public ANetwork
+class LinuxNetwork : public ANetwork
 {
 public:
-  UnixNetwork(size_t recvFromSize = 10, size_t maxEvents = 50);
-  virtual ~UnixNetwork();
+  LinuxNetwork(size_t recvFromSize = 10, size_t maxEvents = 50);
+  virtual ~LinuxNetwork();
 
   void registerClient(const std::weak_ptr<Network::ABasicSocket>& cli) override;
   void registerListener(const std::weak_ptr<Network::AListenSocket>& listener) override;

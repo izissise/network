@@ -14,7 +14,13 @@
 #  include "Unix/UnixNetworkBasicSocket.hpp"
 #  include "Unix/UnixNetworkListenSocket.hpp"
 #  include "Unix/UnixNetworkConnectSocket.hpp"
-#  include "Unix/UnixNetwork.hpp"
+#  include "Unix/LinuxNetwork.hpp"
+# endif
+# ifdef APPLE
+#  include "Unix/UnixNetworkBasicSocket.hpp"
+#  include "Unix/UnixNetworkListenSocket.hpp"
+#  include "Unix/UnixNetworkConnectSocket.hpp"
+#  include "Unix/BsdNetwork.hpp"
 # endif
 # ifdef WIN32
 #  include "Win/WinNetworkBasicSocket.hpp"
@@ -51,7 +57,10 @@ public:
   static std::unique_ptr<Network::ANetwork> createNetwork()
   {
 #ifdef UNIX
-    return std::unique_ptr<Network::ANetwork>(new Unix::UnixNetwork());
+    return std::unique_ptr<Network::ANetwork>(new Unix::LinuxNetwork());
+#endif
+#ifdef APPLE
+    return std::unique_ptr<Network::ANetwork>(new Unix::BsdNetwork());
 #endif
 #ifdef WIN32
     return std::unique_ptr<Network::ANetwork>(new Win::WinNetwork());
