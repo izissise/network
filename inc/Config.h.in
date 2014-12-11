@@ -8,5 +8,8 @@
 # define CURRENT_DATE @PROJECT_BUILD_DATE@
 
 # define @BUILDTARGET@
+# ifdef APPLE
+#  define UNIX
+# endif
 
 #endif

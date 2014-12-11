@@ -28,4 +28,4 @@ protected:
 };
 };
 
-#endif // UNIXNETWORK_H
+#endif // WINNETWORK_H

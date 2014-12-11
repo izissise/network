@@ -10,18 +10,15 @@
 # include "ANetwork.hpp"
 
 # include "Config.h"
+
 # ifdef UNIX
 #  include "Unix/UnixNetworkBasicSocket.hpp"
 #  include "Unix/UnixNetworkListenSocket.hpp"
 #  include "Unix/UnixNetworkConnectSocket.hpp"
-#  include "Unix/LinuxNetwork.hpp"
-# endif
-# ifdef APPLE
-#  define UNIX
-#  include "Unix/UnixNetworkBasicSocket.hpp"
-#  include "Unix/UnixNetworkListenSocket.hpp"
-#  include "Unix/UnixNetworkConnectSocket.hpp"
 #  include "Unix/BsdNetwork.hpp"
+#  ifndef APPLE
+#    include "Unix/LinuxNetwork.hpp"
+#  endif
 # endif
 # ifdef WIN32
 #  include "Win/WinNetworkBasicSocket.hpp"
