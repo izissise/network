@@ -20,11 +20,11 @@ void SocketClientHelper::onReadeable()
       _socket->read(buff, size);
       size = buff.size();
       _readBuff.writeBuffer(buff);
+      onRead(size);
       if (_writeBuff.getLeftRead() > 0)
         _socket->setEventRequest(Network::ASocket::Event::RDWR);
       else
         _socket->setEventRequest(Network::ASocket::Event::READ);
-      onRead(size);
       if (size == 0 && _socket->getSockType() == ASocket::SockType::TCP)
         _connected = false;
     }
@@ -49,11 +49,11 @@ void SocketClientHelper::onWritable()
   try {
       sizeWrite = _socket->write(buff);
       _writeBuff.rollbackReadBuffer(size - sizeWrite);
+      onWrite(size);
       if (_writeBuff.getLeftRead() > 0)
         _socket->setEventRequest(Network::ASocket::Event::RDWR);
       else
         _socket->setEventRequest(Network::ASocket::Event::READ);
-      onWrite(size);
     }
   catch (Network::Error& e)
     {
