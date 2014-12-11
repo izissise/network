@@ -68,7 +68,7 @@ size_t BasicSocket::write(const Network::Buffer& data)
 {
   int ret;
 
-  ret = ::write(_socket, data.data(), data.size());
+  ret = send(_socket, data.data(), data.size(), MSG_NOSIGNAL);
   if (ret == -1)
     throw Error(strerror(errno));
   return ret;
@@ -77,9 +77,9 @@ size_t BasicSocket::write(const Network::Buffer& data)
 void BasicSocket::read(Network::Buffer& data, size_t size)
 {
   int ret;
-  std::unique_ptr<char[]> 	buff(new char[size]);
+  std::unique_ptr<char> 	buff(new char[size]);
 
-  ret = ::read(_socket, buff.get(), size);
+  ret = recv(_socket, buff.get(), size, 0);
   if (ret == -1)
     throw Error(strerror(errno));
   data.resize(ret);

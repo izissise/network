@@ -77,7 +77,7 @@ size_t BasicSocket::write(const Network::Buffer& data)
 void BasicSocket::read(Network::Buffer& data, size_t size)
 {
   int ret;
-  std::unique_ptr<char[]> 	buff(new char[size]);
+  std::unique_ptr<char> 	buff(new char[size]);
 
   ret = recv(_socket, buff.get(), size, 0);
   if (ret == -1)
