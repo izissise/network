@@ -63,7 +63,8 @@ CURRENT_DATE(PROJECT_BUILD_DATE)
 # All source files
 set(lib_source_files "src/Error.cpp"
 					 "src/ANetwork.cpp"
-					 "src/NetworkFactory.cpp")
+					 "src/NetworkFactory.cpp"
+					 "src/RingBuffer.cpp")
 
 set(BUILDTARGET "Unknown")
 if (WIN32)
@@ -89,14 +90,14 @@ set(lib_source_files ${lib_source_files}
 		     "src/Unix/UnixNetworkBasicSocket.cpp"
 		     "src/Unix/UnixNetworkConnectSocket.cpp"
 		     "src/Unix/UnixNetworkListenSocket.cpp"
-		     "src/Unix/UnixSocket.cpp")
+		     "src/Unix/UnixSocket.cpp"
+		     "src/Unix/BsdNetwork.cpp")
 
     if (APPLE)
-	 set(BUILDTARGET "APPLE")
-     set(lib_source_files ${lib_source_files} "src/Unix/BsdNetwork.cpp")
+     set(BUILDTARGET "APPLE")
     else()
-     set(lib_source_files ${lib_source_files} "src/Unix/LinuxNetwork.cpp")
-	endif()
+     set(lib_source_files ${lib_source_files}  "src/Unix/LinuxNetwork.cpp")
+    endif()
 endif()
 
 # configure a header file to pass some of the CMake settings
