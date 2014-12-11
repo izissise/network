@@ -64,7 +64,8 @@ CURRENT_DATE(PROJECT_BUILD_DATE)
 set(lib_source_files "src/Error.cpp"
 					 "src/ANetwork.cpp"
 					 "src/NetworkFactory.cpp"
-					 "src/RingBuffer.cpp")
+					 "src/RingBuffer.cpp"
+					 "src/ClientHelper.cpp")
 
 set(BUILDTARGET "Unknown")
 if (WIN32)
