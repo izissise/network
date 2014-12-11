@@ -24,7 +24,8 @@ public:
   {
     READ,
     WRITE,
-    RDWR
+    RDWR,
+    NONE
   };
 
 public:

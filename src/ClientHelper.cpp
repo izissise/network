@@ -32,6 +32,8 @@ void SocketClientHelper::onReadeable()
     {
       _connected = false;
     }
+  if (!_connected)
+    _socket->setEventRequest(Network::ASocket::Event::NONE);
 }
 
 void SocketClientHelper::onWritable()
@@ -55,10 +57,12 @@ void SocketClientHelper::onWritable()
       _connected = false;
       _writeBuff.rollbackReadBuffer(size);
     }
+  if (!_connected)
+    _socket->setEventRequest(Network::ASocket::Event::NONE);
 }
 
 IdentityClientHelper::IdentityClientHelper(const std::shared_ptr<Network::Identity>& id,
-                                 const std::weak_ptr<Network::AListenSocket>& listener)
+    const std::weak_ptr<Network::AListenSocket>& listener)
   : _id(id), _listener(listener)
 {
   _id->onRead = std::bind(&IdentityClientHelper::readData, this, std::placeholders::_1);
