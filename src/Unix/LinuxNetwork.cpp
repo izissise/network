@@ -67,9 +67,11 @@ void LinuxNetwork::updateRequest()
     struct epoll_event ev;
     std::memset(&ev, 0, sizeof(decltype(ev)));
     ev.data.ptr = data;
-    ev.events = ((req == ASocket::Event::READ) ? EPOLLIN :
-                 ((req == ASocket::Event::WRITE) ? EPOLLOUT :
-                  ((req == ASocket::Event::WRITE) ? (EPOLLIN | EPOLLOUT) : 0)));
+    ev.events = 0;
+    if ((req == ASocket::Event::READ) || (req == ASocket::Event::RDWR))
+      ev.events |= EPOLLIN;
+    if ((req == ASocket::Event::WRITE) || (req == ASocket::Event::RDWR))
+      ev.events |= EPOLLOUT;
     epoll_ctl(_pollFd, EPOLL_CTL_MOD, fd, &ev);
   };
 
