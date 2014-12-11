@@ -12,6 +12,7 @@ public:
   ClientHelper(const std::shared_ptr<Network::ABasicSocket>& sock);
   virtual ~ClientHelper() = default;
 
+protected:
   virtual void onReadeable() = 0;
   virtual void onWritable() = 0;
 

@@ -16,7 +16,7 @@ void RingBuffer::writeBuffer(const Network::Buffer& data)
 
   tmpsize = (2 * _buffSize - _idxW) % _buffSize;
   std::memcpy(&(buffer[_idxW]), data.data(), size < tmpsize ? size : tmpsize);
-  if (size - tmpsize > 0)
+  if (size > tmpsize)
     std::memcpy(buffer, &((data.data())[tmpsize]), size - tmpsize);
   _idxW += size;
   if (_idxW >= _idxR + _buffSize)
@@ -35,7 +35,7 @@ void RingBuffer::readBuffer(Network::Buffer& data, size_t size)
   tmpsize = (2 * _buffSize - _idxR) % _buffSize;
   data.resize(size);
   std::memcpy(&(*(data.begin())), &(buffer[_idxR]), size < tmpsize ? size : tmpsize);
-  if (size - tmpsize > 0)
+  if (size > tmpsize)
     std::memcpy(&((&(*(data.begin())))[tmpsize]), buffer, size - tmpsize);
   _idxR = (_idxR + size) % _buffSize;
 }
