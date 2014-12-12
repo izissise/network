@@ -1,5 +1,7 @@
 #include "Unix/BsdNetwork.hpp"
 
+#include <csignal>
+
 #include "Error.hpp"
 #include "Unix/UnixNetworkBasicSocket.hpp"
 #include "Unix/UnixNetworkListenSocket.hpp"
@@ -7,9 +9,14 @@
 namespace Network {
 namespace Unix {
 
+std::atomic<bool> BsdNetwork::_init(true);
+
 BsdNetwork::BsdNetwork(size_t recvFromSize)
   : ANetwork(recvFromSize)
 {
+  if (_init.exchange(false))
+    signal(SIGPIPE, SIG_IGN);
+
   _maxFd = 0;
 }
 

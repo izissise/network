@@ -68,7 +68,7 @@ size_t BasicSocket::write(const Network::Buffer& data)
 {
   int ret;
 
-  ret = send(_socket, data.data(), data.size(), MSG_NOSIGNAL);
+  ret = send(_socket, data.data(), data.size(), 0);
   if (ret == -1)
     throw Error(strerror(errno));
   return ret;

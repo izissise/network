@@ -10,21 +10,32 @@
 namespace Network {
 namespace Win {
 
+std::atomic<bool> WinNetwork::_init(true);
+std::atomic<size_t> WinNetwork::_nbInstance(0);
+
 WinNetwork::WinNetwork(size_t recvFromSize)
   : ANetwork(recvFromSize)
 {
+  _nbInstance += 1;
   _maxFd = 0;
   // Initialize Winsock
-  WSADATA wsaData;
-  int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-  if (iResult != 0)
-    throw Network::Error("WSAStartup failed");
-
+  if (_init.exchange(false))
+    {
+      WSADATA wsaData;
+      int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+      if (iResult != 0)
+        throw Network::Error("WSAStartup failed");
+    }
 }
 
 WinNetwork::~WinNetwork()
 {
-  WSACleanup();
+  if (_nbInstance == 1)
+  {
+    WSACleanup();
+    _init.store(true);
+  }
+  _nbInstance -= 1;
 }
 
 void WinNetwork::setFdSet()

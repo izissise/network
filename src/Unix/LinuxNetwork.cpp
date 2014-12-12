@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <csignal>
 
 #include "Error.hpp"
 #include "Unix/UnixNetworkBasicSocket.hpp"
@@ -14,9 +15,14 @@
 namespace Network {
 namespace Unix {
 
+std::atomic<bool> LinuxNetwork::_init(true);
+
 LinuxNetwork::LinuxNetwork(size_t recvFromSize, size_t maxEvents)
   : ANetwork::ANetwork(recvFromSize), _maxEvents(maxEvents)
 {
+  if (_init.exchange(false))
+    signal(SIGPIPE, SIG_IGN);
+
   _events = new struct epoll_event[_maxEvents];
   _pollFd = epoll_create1(0);
   if (_pollFd == -1)

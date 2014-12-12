@@ -1,6 +1,8 @@
 #ifndef LUNIXNETWORK_H
 # define LUNIXNETWORK_H
 
+# include <atomic>
+
 # include <sys/epoll.h>
 
 # include "ANetwork.hpp"
@@ -10,6 +12,9 @@ namespace Unix {
 
 class LinuxNetwork : public ANetwork
 {
+private:
+  static std::atomic<bool>   _init;
+
 public:
   LinuxNetwork(size_t recvFromSize = 10, size_t maxEvents = 50);
   virtual ~LinuxNetwork();
