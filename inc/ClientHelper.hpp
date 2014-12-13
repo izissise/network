@@ -14,8 +14,12 @@ namespace Network {
 class SocketClientHelper
 {
 public:
+  SocketClientHelper(size_t readSize = 10);
   SocketClientHelper(const std::shared_ptr<Network::ABasicSocket>& sock, size_t readSize = 10);
   virtual ~SocketClientHelper() = default;
+
+  const std::shared_ptr<Network::ABasicSocket>& getSocket() const {return _socket;};
+  void setSocket(const std::shared_ptr<Network::ABasicSocket>& sock);
 
   bool getConnected() const {return _connected;};
 
@@ -28,20 +32,24 @@ protected:
   virtual void onWrite(size_t sizeWrite) = 0;
 
 protected:
-  std::shared_ptr<Network::ABasicSocket> _socket;
   size_t								 _readSize;
-  bool									 _connected;
   Network::RingBuffer 					 _readBuff;
   Network::RingBuffer 					 _writeBuff;
+
+private:
+  bool									 _connected;
+  std::shared_ptr<Network::ABasicSocket> _socket;
 };
 
 class IdentityClientHelper
 {
 public:
   IdentityClientHelper(const std::shared_ptr<Network::Identity>& id,
-                  const std::weak_ptr<Network::AListenSocket>& listener);
+                       const std::weak_ptr<Network::AListenSocket>& listener);
   virtual ~IdentityClientHelper() = default;
 
+  const std::shared_ptr<Network::Identity>& getId() const {return _id;};
+  void setId(const std::shared_ptr<Network::Identity>& id);
 
 protected:
   void readData(const Network::Buffer& data);
@@ -49,10 +57,13 @@ protected:
   virtual void onRead() = 0;
 
 protected:
-  std::shared_ptr<Network::Identity>	 _id;
   std::weak_ptr<Network::AListenSocket>  _listener;
   Network::RingBuffer 					 _readBuff;
   Network::RingBuffer 					 _writeBuff;
+
+private:
+  std::shared_ptr<Network::Identity>	 _id;
+
 };
 
 };

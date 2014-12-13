@@ -3,8 +3,21 @@
 namespace Network {
 
 SocketClientHelper::SocketClientHelper(const std::shared_ptr<Network::ABasicSocket>& sock, size_t readSize)
-  : _socket(sock), _readSize(readSize), _connected(true)
+  : _readSize(readSize), _connected(true), _socket(sock)
 {
+  _socket->setReadeableCallback(std::bind(&SocketClientHelper::onReadeable, this));
+  _socket->setWritableCallback(std::bind(&SocketClientHelper::onWritable, this));
+}
+
+SocketClientHelper::SocketClientHelper(size_t readSize)
+  : _readSize(readSize), _connected(false), _socket(nullptr)
+{
+
+}
+
+void SocketClientHelper::setSocket(const std::shared_ptr<Network::ABasicSocket>& sock)
+{
+  _socket = sock;
   _socket->setReadeableCallback(std::bind(&SocketClientHelper::onReadeable, this));
   _socket->setWritableCallback(std::bind(&SocketClientHelper::onWritable, this));
 }
@@ -69,8 +82,14 @@ void SocketClientHelper::onWritable()
 
 IdentityClientHelper::IdentityClientHelper(const std::shared_ptr<Network::Identity>& id,
     const std::weak_ptr<Network::AListenSocket>& listener)
-  : _id(id), _listener(listener)
+  : _listener(listener), _id(id)
 {
+  _id->onRead = std::bind(&IdentityClientHelper::readData, this, std::placeholders::_1);
+}
+
+void IdentityClientHelper::setId(const std::shared_ptr<Network::Identity>& id)
+{
+  _id = id;
   _id->onRead = std::bind(&IdentityClientHelper::readData, this, std::placeholders::_1);
 }
 
