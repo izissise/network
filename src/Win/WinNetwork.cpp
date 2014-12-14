@@ -114,6 +114,8 @@ void WinNetwork::poll(bool block)
   tv.tv_usec = 1;
 
   setFdSet();
+  if (_listener.size() + _clients.size() == 0)
+    return;
   if ((select(_maxFd + 1, &_setr, &_setw, nullptr, block ? nullptr : &tv) == -1))
     throw Network::Error(std::string("select") + strerror(errno));
   pollFdsets();

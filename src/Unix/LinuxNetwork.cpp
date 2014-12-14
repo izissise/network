@@ -139,6 +139,8 @@ void LinuxNetwork::dispatchEvent(struct epoll_event* ev)
 void LinuxNetwork::poll(bool block)
 {
   updateRequest();
+  if (_listener.size() + _clients.size() == 0)
+    return;
   int ret = epoll_wait(_pollFd, _events, _maxEvents, block ? -1 : 0);
   if (ret == -1)
     throw std::runtime_error("epoll_wait");

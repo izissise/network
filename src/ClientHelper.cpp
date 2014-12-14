@@ -17,6 +17,7 @@ SocketClientHelper::SocketClientHelper(size_t readSize)
 
 void SocketClientHelper::setSocket(const std::shared_ptr<Network::ABasicSocket>& sock)
 {
+  _connected = true;
   _socket = sock;
   _socket->setReadeableCallback(std::bind(&SocketClientHelper::onReadeable, this));
   _socket->setWritableCallback(std::bind(&SocketClientHelper::onWritable, this));

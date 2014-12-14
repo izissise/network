@@ -21,7 +21,7 @@ public:
   const std::shared_ptr<Network::ABasicSocket>& getSocket() const {return _socket;};
   void setSocket(const std::shared_ptr<Network::ABasicSocket>& sock);
 
-  bool getConnected() const {return _connected;};
+  bool isConnected() const {return _connected;};
 
 private:
   void onReadeable();
