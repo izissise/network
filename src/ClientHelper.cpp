@@ -7,6 +7,7 @@ SocketClientHelper::SocketClientHelper(const std::shared_ptr<Network::ABasicSock
 {
   _socket->setReadeableCallback(std::bind(&SocketClientHelper::onReadeable, this));
   _socket->setWritableCallback(std::bind(&SocketClientHelper::onWritable, this));
+  _socket->setEventRequest(Network::ASocket::Event::READ);
 }
 
 SocketClientHelper::SocketClientHelper(size_t readSize)
@@ -17,10 +18,11 @@ SocketClientHelper::SocketClientHelper(size_t readSize)
 
 void SocketClientHelper::setSocket(const std::shared_ptr<Network::ABasicSocket>& sock)
 {
-  _connected = true;
   _socket = sock;
   _socket->setReadeableCallback(std::bind(&SocketClientHelper::onReadeable, this));
   _socket->setWritableCallback(std::bind(&SocketClientHelper::onWritable, this));
+  _socket->setEventRequest(Network::ASocket::Event::READ);
+  _connected = true;
 }
 
 void SocketClientHelper::onReadeable()

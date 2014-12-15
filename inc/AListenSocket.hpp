@@ -14,6 +14,7 @@ namespace Network {
 class AListenSocket : public std::enable_shared_from_this<AListenSocket>, virtual public ASocket
 {
 public:
+  AListenSocket() {setEventRequest(Network::ASocket::Event::READ);};
   virtual ~AListenSocket() = default;
 
   /**
