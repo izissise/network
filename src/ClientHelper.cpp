@@ -52,6 +52,7 @@ void SocketClientHelper::onReadeable()
     {
       _socket->setEventRequest(Network::ASocket::Event::NONE);
       _socket->closeSocket();
+      onDisconnet();
     }
 }
 
