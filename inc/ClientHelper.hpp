@@ -37,9 +37,8 @@ protected:
   Network::RingBuffer 					 _readBuff;
   Network::RingBuffer 					 _writeBuff;
   bool									 _connected;
-
-private:
   std::shared_ptr<Network::ABasicSocket> _socket;
+
 };
 
 class IdentityClientHelper
@@ -61,8 +60,6 @@ protected:
   std::weak_ptr<Network::AListenSocket>  _listener;
   Network::RingBuffer 					 _readBuff;
   Network::RingBuffer 					 _writeBuff;
-
-private:
   std::shared_ptr<Network::Identity>	 _id;
 
 };
