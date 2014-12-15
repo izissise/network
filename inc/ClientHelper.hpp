@@ -30,14 +30,15 @@ private:
 protected:
   virtual void onRead(size_t sizeRead) = 0;
   virtual void onWrite(size_t sizeWrite) = 0;
+  virtual void onDisconnet() = 0;
 
 protected:
   size_t								 _readSize;
   Network::RingBuffer 					 _readBuff;
   Network::RingBuffer 					 _writeBuff;
+  bool									 _connected;
 
 private:
-  bool									 _connected;
   std::shared_ptr<Network::ABasicSocket> _socket;
 };
 

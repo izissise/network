@@ -33,10 +33,10 @@ public:
   //Iterators
 
 protected:
-  size_t					_buffSize;
-  size_t					_idxR;
-  size_t					_idxW;
-  std::unique_ptr<uint8_t>	_buffer;
+  size_t						_buffSize;
+  size_t						_idxR;
+  size_t						_idxW;
+  std::unique_ptr<uint8_t[]>	_buffer;
 };
 
 };

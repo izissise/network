@@ -43,7 +43,7 @@ void RingBuffer::readBuffer(Network::Buffer& data, size_t size)
 void RingBuffer::extendRingBuffer(size_t addSize)
 {
   size_t	fsize = _buffSize + addSize;
-  std::unique_ptr<uint8_t> tmp(new uint8_t[fsize]);
+  std::unique_ptr<uint8_t[]> tmp(new uint8_t[fsize]);
 
   std::memcpy(tmp.get(), _buffer.get(), _buffSize);
   std::swap(_buffer, tmp);
