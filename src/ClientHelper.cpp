@@ -75,6 +75,7 @@ void SocketClientHelper::onWritable()
     {
       _socket->setEventRequest(Network::ASocket::Event::NONE);
       _socket->closeSocket();
+      onDisconnet();
     }
 }
 
