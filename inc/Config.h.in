@@ -1,8 +1,8 @@
 #ifndef _CONFIG_H_
 # define _CONFIG_H_
 
-# define xstr(s) str(s)
-# define str(s) #s
+# define stringyfier(s) macrostr(s)
+# define macrostr(s) #s
 
 # define PROJECT_VERSION @PROJECTVERSION@
 # define CURRENT_DATE @PROJECT_BUILD_DATE@
