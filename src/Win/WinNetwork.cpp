@@ -63,7 +63,7 @@ void WinNetwork::setFdSet()
   _listener.erase(std::remove_if(_listener.begin(), _listener.end(),
   [&setupdate](std::weak_ptr<AListenSocket>& li) -> bool {
     std::shared_ptr<ListenSocket> sock = std::dynamic_pointer_cast<ListenSocket>(li.lock());
-    if (!sock)
+    if (!sock || sock->getSockFd() == -1)
       return true;
     Network::ASocket::Event req = sock->getEventRequest();
     setupdate(sock->getSockFd(), req);
@@ -73,7 +73,7 @@ void WinNetwork::setFdSet()
   _clients.erase(std::remove_if(_clients.begin(), _clients.end(),
   [&setupdate](std::weak_ptr<ABasicSocket>& cl) -> bool {
     std::shared_ptr<BasicSocket> sock = std::dynamic_pointer_cast<BasicSocket>(cl.lock());
-    if (!sock)
+    if (!sock || sock->getSockFd() == -1)
       return true;
     sock->getPollUpdateCallback()();
     Network::ASocket::Event req = sock->getEventRequest();
@@ -88,7 +88,7 @@ void WinNetwork::pollFdsets()
   for (auto& li : _listener)
     {
       std::shared_ptr<ListenSocket> sock = std::dynamic_pointer_cast<ListenSocket>(li.lock());
-      if (sock)
+      if (sock && sock->getSockFd() != -1)
         {
           if (FD_ISSET(sock->getSockFd(), &_setr))
             dispatchListenerReadEv(li.lock());
@@ -98,7 +98,7 @@ void WinNetwork::pollFdsets()
   for (auto& cli : _clients)
     {
       std::shared_ptr<BasicSocket> sock = std::dynamic_pointer_cast<BasicSocket>(cli.lock());
-      if (sock)
+      if (sock && sock->getSockFd() != -1)
         {
           if (FD_ISSET(sock->getSockFd(), &_setr))
             sock->getReadeableCallback()();

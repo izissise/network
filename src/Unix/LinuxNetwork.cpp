@@ -84,7 +84,7 @@ void LinuxNetwork::updateRequest()
   _listener.erase(std::remove_if(_listener.begin(), _listener.end(),
   [&epupdate](std::weak_ptr<AListenSocket>& li) -> bool {
     std::shared_ptr<ListenSocket> sock = std::dynamic_pointer_cast<ListenSocket>(li.lock());
-    if (!sock)
+    if (!sock || sock->getSockFd() == -1)
       return true;
     Network::ASocket::Event req = sock->getEventRequest();
     epupdate(sock->getSockFd(), req, (li.lock()).get());
@@ -95,7 +95,7 @@ void LinuxNetwork::updateRequest()
   _clients.erase(std::remove_if(_clients.begin(), _clients.end(),
   [&epupdate](std::weak_ptr<ABasicSocket>& cl) -> bool {
     std::shared_ptr<BasicSocket> sock = std::dynamic_pointer_cast<BasicSocket>(cl.lock());
-    if (!sock)
+    if (!sock || sock->getSockFd() == -1)
       return true;
     sock->getPollUpdateCallback()();
     Network::ASocket::Event req = sock->getEventRequest();
