@@ -45,12 +45,15 @@ public:
   **/
   void setReadeableCallback(const std::function<void()>& cb) {_readeableCb = cb;};
   void setWritableCallback(const std::function<void()>& cb) {_writableCb = cb;};
+  void setPollUpdateCallback(const std::function<void()>& cb) {_pollUpdateCb = cb;};
   const std::function<void()>& getReadeableCallback() const {return _readeableCb;};
   const std::function<void()>& getWritableCallback() const {return _writableCb;};
+  const std::function<void()>& getPollUpdateCallback() const {return _pollUpdateCb;};
 
 protected:
 	std::function<void()> _readeableCb;
 	std::function<void()> _writableCb;
+	std::function<void()> _pollUpdateCb;
 };
 
 };

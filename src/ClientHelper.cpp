@@ -7,6 +7,7 @@ SocketClientHelper::SocketClientHelper(const std::shared_ptr<Network::ABasicSock
 {
   _socket->setReadeableCallback(std::bind(&SocketClientHelper::onReadeable, this));
   _socket->setWritableCallback(std::bind(&SocketClientHelper::onWritable, this));
+  _socket->setPollUpdateCallback(std::bind(&SocketClientHelper::onPollUpdate, this));
   _socket->setEventRequest(Network::ASocket::Event::READ);
 }
 
@@ -37,10 +38,6 @@ void SocketClientHelper::onReadeable()
       size = buff.size();
       _readBuff.writeBuffer(buff);
       onRead(size);
-      if (_writeBuff.getLeftRead() > 0)
-        _socket->setEventRequest(Network::ASocket::Event::RDWR);
-      else
-        _socket->setEventRequest(Network::ASocket::Event::READ);
       if (size == 0 && _socket->getSockType() == ASocket::SockType::TCP)
         _connected = false;
     }
@@ -67,10 +64,6 @@ void SocketClientHelper::onWritable()
       sizeWrite = _socket->write(buff);
       _writeBuff.rollbackReadBuffer(size - sizeWrite);
       onWrite(size);
-      if (_writeBuff.getLeftRead() > 0)
-        _socket->setEventRequest(Network::ASocket::Event::RDWR);
-      else
-        _socket->setEventRequest(Network::ASocket::Event::READ);
     }
   catch (Network::Error& e)
     {
@@ -82,6 +75,14 @@ void SocketClientHelper::onWritable()
       _socket->setEventRequest(Network::ASocket::Event::NONE);
       _socket->closeSocket();
     }
+}
+
+void SocketClientHelper::onPollUpdate()
+{
+  if (_writeBuff.getLeftRead() > 0)
+    _socket->setEventRequest(Network::ASocket::Event::RDWR);
+  else
+    _socket->setEventRequest(Network::ASocket::Event::READ);
 }
 
 IdentityClientHelper::IdentityClientHelper(const std::shared_ptr<Network::Identity>& id,

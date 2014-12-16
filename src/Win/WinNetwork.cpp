@@ -75,6 +75,7 @@ void WinNetwork::setFdSet()
     std::shared_ptr<BasicSocket> sock = std::dynamic_pointer_cast<BasicSocket>(cl.lock());
     if (!sock)
       return true;
+    sock->getPollUpdateCallback()();
     Network::ASocket::Event req = sock->getEventRequest();
     setupdate(sock->getSockFd(), req);
     return false;

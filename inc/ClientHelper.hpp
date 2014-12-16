@@ -26,6 +26,7 @@ public:
 private:
   void onReadeable();
   void onWritable();
+  void onPollUpdate();
 
 protected:
   virtual void onRead(size_t sizeRead) = 0;
