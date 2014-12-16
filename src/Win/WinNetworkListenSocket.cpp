@@ -1,6 +1,7 @@
 #include "Win/WinNetworkListenSocket.hpp"
 
 #include <sstream>
+#include <iostream>
 
 #include "Win/WinNetworkBasicSocket.hpp"
 
@@ -91,14 +92,14 @@ size_t ListenSocket::sendTo(const Network::Identity &cli, const Network::Buffer&
   return ret;
 }
 
-void ListenSocket::bind(int sockfd, const struct sockaddr * addr, socklen_t addrlen)
+void ListenSocket::bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
   int ret = ::bind(sockfd, addr, addrlen);
   if (ret)
     throw Error(strerror(errno));
 }
 
-void ListenSocket::bindReuse(int sockfd, const struct sockaddr * addr, socklen_t addrlen)
+void ListenSocket::bindReuse(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
   /*int	yes;
 
@@ -108,7 +109,10 @@ void ListenSocket::bindReuse(int sockfd, const struct sockaddr * addr, socklen_t
   int ret = ::bind(sockfd, addr, addrlen);
   if (ret)
     throw Error(strerror(errno));*/
-  throw std::runtime_error("Win::ListenSocket::bindReuse not implemented");
+  std::cerr << "Win::ListenSocket::bindReuse not implemented.\n"
+            << "Falling back to normal bind" << std::endl;
+  bind(sockfd, addr, addrlen);
+  //throw std::runtime_error("Win::ListenSocket::bindReuse not implemented");
 }
 
 };

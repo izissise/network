@@ -1,13 +1,15 @@
 #include "Win/WinNetworkConnectSocket.hpp"
 
+#include <iostream>
+
 namespace Network {
 namespace Win {
 
 ConnectSocket::ConnectSocket(const std::string& ip, const std::string& port,
-    ASocket::SockType socktype,
-    bool nonBlock)
+                             ASocket::SockType socktype,
+                             bool nonBlock)
   : BasicSocket(ip, socktype, port,
-      nonBlock ? &ConnectSocket::connectNonBlock : &ConnectSocket::connect)
+                nonBlock ? &ConnectSocket::connectNonBlock : &ConnectSocket::connect)
 {
   if (!nonBlock)
     {
@@ -28,25 +30,28 @@ void ConnectSocket::connect(int sockfd, const struct sockaddr *addr, socklen_t a
 
 void ConnectSocket::connectNonBlock(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
- /* int	ret;
+  /* int	ret;
 
-  auto setFdFlag = [](int fd, int flag, int unset) -> bool {
-    int	flags;
+   auto setFdFlag = [](int fd, int flag, int unset) -> bool {
+     int	flags;
 
-    if ((flags = fcntl(fd, F_GETFL, 0)) == -1)
-      return false;
-    flags = unset ? (flags & ~flag) : (flags | flag);
-    if (fcntl(fd, F_SETFL, flags) == -1)
-      return false;
-    return true;
-  };
+     if ((flags = fcntl(fd, F_GETFL, 0)) == -1)
+       return false;
+     flags = unset ? (flags & ~flag) : (flags | flag);
+     if (fcntl(fd, F_SETFL, flags) == -1)
+       return false;
+     return true;
+   };
 
-  if (((ret = setFdFlag(sockfd, O_NONBLOCK, 0)) == -1)
-      || (((ret = ::connect(sockfd, addr, addrlen)) == -1)
-          && (errno != EINPROGRESS))
-      || ((ret = setFdFlag(sockfd, O_NONBLOCK, 1)) == -1))
-    throw Error(strerror(errno));*/
-    throw std::runtime_error("Win::ConnectSocket::connectNonBlock not implemented.");
+   if (((ret = setFdFlag(sockfd, O_NONBLOCK, 0)) == -1)
+       || (((ret = ::connect(sockfd, addr, addrlen)) == -1)
+           && (errno != EINPROGRESS))
+       || ((ret = setFdFlag(sockfd, O_NONBLOCK, 1)) == -1))
+     throw Error(strerror(errno));*/
+  std::cerr << "Win::ConnectSocket::connectNonBlock not implemented.\n"
+            << "Falling back on normal socket" << std::endl;
+  connectNonBlock(sockfd, addr, addrlen);
+  // throw std::runtime_error("Win::ConnectSocket::connectNonBlock not implemented.");
 }
 
 };
