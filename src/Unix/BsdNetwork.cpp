@@ -103,7 +103,7 @@ void BsdNetwork::poll(bool block)
   setFdSet();
   if (_listener.size() + _clients.size() == 0)
     return;
-  if ((select(_maxFd + 1, &_setr, &_setw, nullptr, block ? nullptr : &tv) == -1))
+  if ((select(_maxFd + 1, &_setr, &_setw, nullptr, block ? nullptr : &tv) == -1) && errno != EINTR)
     throw Network::Error(std::string("select") + strerror(errno));
   pollFdsets();
 }

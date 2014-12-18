@@ -143,7 +143,7 @@ void LinuxNetwork::poll(bool block)
   if (_listener.size() + _clients.size() == 0)
     return;
   int ret = epoll_wait(_pollFd, _events, _maxEvents, block ? -1 : 0);
-  if (ret == -1)
+  if (ret == -1 && errno != EINTR)
     throw std::runtime_error("epoll_wait");
   for (int i = 0; i < ret; ++i)
     dispatchEvent(&(_events[i]));
