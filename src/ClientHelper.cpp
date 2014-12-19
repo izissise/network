@@ -12,7 +12,7 @@ SocketClientHelper::SocketClientHelper(const std::shared_ptr<Network::ABasicSock
 }
 
 SocketClientHelper::SocketClientHelper(size_t readSize)
-  : _readSize(readSize), _connected(false), _socket(nullptr)
+  : _readSize(readSize), _connected(false), _disconnectWhenAllWrited(false), _socket(nullptr)
 {
 
 }
