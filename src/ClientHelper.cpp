@@ -3,7 +3,7 @@
 namespace Network {
 
 SocketClientHelper::SocketClientHelper(const std::shared_ptr<Network::ABasicSocket>& sock, size_t readSize)
-  : _readSize(readSize), _connected(true), _socket(sock)
+  : _readSize(readSize), _connected(true), _disconnectWhenAllWrited(false), _socket(sock)
 {
   _socket->setReadeableCallback(std::bind(&SocketClientHelper::onReadeable, this));
   _socket->setWritableCallback(std::bind(&SocketClientHelper::onWritable, this));
@@ -64,7 +64,9 @@ void SocketClientHelper::onWritable()
   try {
       sizeWrite = _socket->write(buff);
       _writeBuff.rollbackReadBuffer(size - sizeWrite);
-      onWrite(size);
+      onWrite(sizeWrite);
+      if (_disconnectWhenAllWrited && (sizeWrite == size))
+        _connected = false;
     }
   catch (Network::Error& e)
     {

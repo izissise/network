@@ -38,6 +38,7 @@ protected:
   Network::RingBuffer 					 _readBuff;
   Network::RingBuffer 					 _writeBuff;
   bool									 _connected;
+  bool									 _disconnectWhenAllWrited;
   std::shared_ptr<Network::ABasicSocket> _socket;
 
 };
