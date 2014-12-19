@@ -52,9 +52,9 @@ public:
 
   const std::shared_ptr<Network::Identity>& getId() const {return _id;};
   void setId(const std::shared_ptr<Network::Identity>& id);
+  void readData(const Network::Buffer& data);
 
 protected:
-  void readData(const Network::Buffer& data);
   void writeData();
   virtual void onRead() = 0;
 
