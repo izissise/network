@@ -39,7 +39,8 @@ void SocketClientHelper::onReadeable()
       size = buff.size();
       _readBuff.writeBuffer(buff);
       onRead(size);
-      if (size == 0 && _socket->getSockType() == ASocket::SockType::TCP)
+      if ((size == 0 && _socket->getSockType() == ASocket::SockType::TCP)
+          || (_disconnectWhenAllWrited && (_writeBuff.getLeftRead() == 0)))
         _connected = false;
     }
   catch (Network::Error& e)
@@ -65,7 +66,7 @@ void SocketClientHelper::onWritable()
       sizeWrite = _socket->write(buff);
       _writeBuff.rollbackReadBuffer(size - sizeWrite);
       onWrite(sizeWrite);
-      if (_disconnectWhenAllWrited && (sizeWrite == size))
+      if (_disconnectWhenAllWrited && (_writeBuff.getLeftRead() == 0))
         _connected = false;
     }
   catch (Network::Error& e)
