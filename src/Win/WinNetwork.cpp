@@ -13,8 +13,7 @@ namespace Win {
 std::atomic<bool> WinNetwork::_init(true);
 std::atomic<size_t> WinNetwork::_nbInstance(0);
 
-WinNetwork::WinNetwork(size_t recvFromSize)
-  : ANetwork(recvFromSize)
+WinNetwork::WinNetwork()
 {
   _nbInstance += 1;
   _maxFd = 0;

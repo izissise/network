@@ -14,7 +14,7 @@ namespace Network {
 class ANetwork
 {
 public:
-  ANetwork(size_t recvfSize = 10) : _recvfSize(recvfSize) {};
+  ANetwork() = default;
   virtual ~ANetwork() = default;
 
   //UDP clients
@@ -36,7 +36,6 @@ protected:
   std::deque<std::weak_ptr<Network::AListenSocket>> _listener;
   std::deque<std::weak_ptr<Network::Identity>> _identities;
   std::deque<std::weak_ptr<Network::ABasicSocket>> _clients;
-  size_t _recvfSize;
 };
 };
 

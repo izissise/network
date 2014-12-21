@@ -19,7 +19,7 @@ private:
   static std::atomic<bool>   _init;
 
 public:
-  BsdNetwork(size_t recvFromSize = 10);
+  BsdNetwork();
   virtual ~BsdNetwork();
 
   void poll(bool block) override;

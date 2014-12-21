@@ -44,7 +44,7 @@ void ANetwork::dispatchListenerReadEv(const std::shared_ptr<AListenSocket>& list
   else if (listener->getSockType() == ASocket::SockType::UDP)
     {
       Network::Buffer data;
-      Identity identity(listener->recvFrom(data, _recvfSize));
+      Identity identity(listener->recvFrom(data));
       if (!dispatchUdpEvent(identity, data))
         {
           std::shared_ptr<Identity> nid(new Identity(identity));

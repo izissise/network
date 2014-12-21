@@ -17,8 +17,8 @@ namespace Unix {
 
 std::atomic<bool> LinuxNetwork::_init(true);
 
-LinuxNetwork::LinuxNetwork(size_t recvFromSize, size_t maxEvents)
-  : ANetwork::ANetwork(recvFromSize), _maxEvents(maxEvents)
+LinuxNetwork::LinuxNetwork(size_t maxEvents)
+  : _maxEvents(maxEvents)
 {
   if (_init.exchange(false))
     signal(SIGPIPE, SIG_IGN);

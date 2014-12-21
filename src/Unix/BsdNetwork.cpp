@@ -11,8 +11,7 @@ namespace Unix {
 
 std::atomic<bool> BsdNetwork::_init(true);
 
-BsdNetwork::BsdNetwork(size_t recvFromSize)
-  : ANetwork(recvFromSize)
+BsdNetwork::BsdNetwork()
 {
   if (_init.exchange(false))
     signal(SIGPIPE, SIG_IGN);

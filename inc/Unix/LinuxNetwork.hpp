@@ -16,7 +16,7 @@ private:
   static std::atomic<bool>   _init;
 
 public:
-  LinuxNetwork(size_t recvFromSize = 10, size_t maxEvents = 50);
+  LinuxNetwork(size_t maxEvents = 200);
   virtual ~LinuxNetwork();
 
   void registerClient(const std::weak_ptr<Network::ABasicSocket>& cli) override;

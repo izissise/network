@@ -37,7 +37,7 @@ std::unique_ptr<ABasicSocket> ListenSocket::acceptClient()
   return std::unique_ptr<ABasicSocket>(new BasicSocket(newfd, _socktype));
 }
 
-Network::Identity ListenSocket::recvFrom(Network::Buffer& data, size_t size)
+Network::Identity ListenSocket::recvFrom(Network::Buffer& data)
 {
   if (_socktype != ASocket::SockType::UDP)
     throw std::runtime_error("recvFrom not implemented for non UDP socket.");
@@ -45,10 +45,10 @@ Network::Identity ListenSocket::recvFrom(Network::Buffer& data, size_t size)
   int 						ret;
   struct sockaddr_storage	raddr;
   socklen_t				    raddrlen = sizeof(decltype(raddr));
-  std::unique_ptr<char[]> 	buff(new char[size]);
+  std::unique_ptr<char[]> 	buff(new char[_recvFromSize]);
 
   std::memset(&raddr, 0, raddrlen);
-  ret = recvfrom(_socket, buff.get(), size, 0,
+  ret = recvfrom(_socket, buff.get(), _recvFromSize, 0,
                  reinterpret_cast<struct sockaddr*>(&raddr), &raddrlen);
   if (ret == -1)
     throw Error(strerror(errno));

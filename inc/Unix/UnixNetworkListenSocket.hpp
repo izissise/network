@@ -24,7 +24,7 @@ public:
 
   std::unique_ptr<ABasicSocket> acceptClient() override;
 
-  Network::Identity recvFrom(Network::Buffer& data, size_t size) override;
+  Network::Identity recvFrom(Network::Buffer& data) override;
 
   size_t sendTo(const Network::Identity& cli, const Network::Buffer& data) override;
 

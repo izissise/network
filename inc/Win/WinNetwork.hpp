@@ -18,7 +18,7 @@ private:
 	static std::atomic<size_t> _nbInstance;
 
 public:
-  WinNetwork(size_t recvFromSize = 10);
+  WinNetwork();
   virtual ~WinNetwork();
 
   void poll(bool block) override;
