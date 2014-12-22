@@ -47,7 +47,7 @@ void ANetwork::dispatchListenerReadEv(const std::shared_ptr<AListenSocket>& list
       Identity identity(listener->recvFrom(data));
       if (!dispatchUdpEvent(identity, data))
         {
-          std::shared_ptr<Identity> nid(new Identity(identity));
+          auto nid = std::make_shared<Identity>(identity);
           listener->getNewConnectionCallback()(nid, data);
         }
     }
