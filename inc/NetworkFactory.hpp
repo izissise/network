@@ -9,7 +9,7 @@
 # include "ABasicSocket.hpp"
 # include "ANetwork.hpp"
 
-# include "Config.h"
+# include "NetworkLibConfig.h"
 
 # ifdef UNIX
 #  include "Unix/UnixNetworkBasicSocket.hpp"

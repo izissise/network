@@ -37,7 +37,7 @@ bool BasicSocket::isConnected()
   tv.tv_usec = 1;
   FD_ZERO(&fdset);
   FD_SET(_socket, &fdset);
-  if ((ret = (select(_socket + 1, NULL, &fdset, NULL, &tv)) <= 0))
+  if (((ret = (select(_socket + 1, NULL, &fdset, NULL, &tv))) <= 0))
     {
       if (ret == -1)
         throw Error(strerror(errno));

@@ -103,7 +103,7 @@ endif()
 # to the source code
 configure_file (
   "inc/Config.h.in"
-  "inc/Config.h"
+  "inc/NetworkLibConfig.h"
 )
 
 include_directories("${CMAKE_CURRENT_BINARY_DIR}/inc")
