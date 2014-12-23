@@ -51,9 +51,7 @@ if (UNIX)
 		FLAGS_DEBUG    "-DNDEBUG" "-g3"
 			   )
 elseif (MSVC)
-  COMPILER_FLAGS(FLAGS "/wd4251" # needs to have dll-interface to be used by clients
-		       "/wd4275" # exported class derived from non-exported class
-			   )
+  COMPILER_FLAGS(FLAGS "/EHsc")
 endif()
 
 # --- global definitions ---

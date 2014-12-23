@@ -50,7 +50,7 @@ void ConnectSocket::connectNonBlock(int sockfd, const struct sockaddr *addr, soc
      throw Error(strerror(errno));*/
   std::cerr << "Win::ConnectSocket::connectNonBlock not implemented.\n"
             << "Falling back on normal socket" << std::endl;
-  connectNonBlock(sockfd, addr, addrlen);
+  connect(sockfd, addr, addrlen);
   // throw std::runtime_error("Win::ConnectSocket::connectNonBlock not implemented.");
 }
 
