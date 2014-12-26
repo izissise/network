@@ -1,5 +1,5 @@
-#ifndef _CONFIG_H_
-# define _CONFIG_H_
+#ifndef _NETWORKLIBCONFIG_H_
+# define _NETWORKLIBCONFIG_H_
 
 # define stringyfier(s) macrostr(s)
 # define macrostr(s) #s

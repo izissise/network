@@ -124,6 +124,11 @@ add_library(
   ${lib_include_files}
 )
 
+if(WIN32)
+ find_library(WS2_32_LIBRARY ws2_32)
+ target_link_libraries(${NAME_LIB} ${WS2_32_LIBRARY})
+endif()
+
 set_target_properties(${NAME_LIB} PROPERTIES
    PUBLIC_HEADER "${lib_include_files}"
 )
