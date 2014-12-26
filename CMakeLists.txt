@@ -125,8 +125,7 @@ add_library(
 )
 
 if(WIN32)
- find_library(WS2_32_LIBRARY ws2_32)
- target_link_libraries(${NAME_LIB} ${WS2_32_LIBRARY})
+ target_link_libraries(${NAME_LIB} ws2_32)
 endif()
 
 set_target_properties(${NAME_LIB} PROPERTIES
