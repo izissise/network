@@ -93,7 +93,7 @@ std::string Socket::ipAddr(const struct sockaddr_storage& addr)
   const void			*res;
   char					buff[BUFSIZ] = { 0 };
 
-  res = NULL;
+  res = nullptr;
   sa = reinterpret_cast<const struct sockaddr*>(&addr);
   if (sa->sa_family == AF_INET)
     res = reinterpret_cast<const void*>(&((reinterpret_cast<const struct sockaddr_in*>(sa))->sin_addr));

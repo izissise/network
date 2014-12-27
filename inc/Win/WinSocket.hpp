@@ -46,7 +46,6 @@ protected:
   static ASocket::SockType intToSockType(int t);
   static int sockTypeToInt(ASocket::SockType t);
   virtual void updateInfo();
-  static char* inet_ntop(int af, const void* src, char* dest, size_t length);
 
 protected:
   struct sockaddr_storage	_addr;

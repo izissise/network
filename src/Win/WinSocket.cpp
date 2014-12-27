@@ -93,16 +93,16 @@ std::string Socket::ipAddr(const struct sockaddr_storage& addr)
   const void			*res;
   char					buff[BUFSIZ] = { 0 };
 
-  res = NULL;
+  res = nullptr;
   sa = reinterpret_cast<const struct sockaddr*>(&addr);
   if (sa->sa_family == AF_INET)
-    res = reinterpret_cast<const void*>(&((reinterpret_cast<const struct sockaddr_in*>(sa))->sin_addr));
+    res = reinterpret_cast<decltype(res)>(&((reinterpret_cast<const struct sockaddr_in*>(sa))->sin_addr));
   else if (sa->sa_family == AF_INET6)
-    res = reinterpret_cast<const void*>(&((reinterpret_cast<const struct sockaddr_in6*>(sa))->sin6_addr));
+    res = reinterpret_cast<decltype(res)*>(&((reinterpret_cast<const struct sockaddr_in6*>(sa))->sin6_addr));
   else
     throw Error("Unknown socket family");
-  inet_ntop((reinterpret_cast<const struct sockaddr*>(&addr))->sa_family,
-            res, buff, sizeof(buff));
+  InetNtop((reinterpret_cast<const struct sockaddr*>(&addr))->sa_family,
+           const_cast<PVOID>(res), buff, sizeof(buff));
   return std::string(buff);
 }
 
@@ -143,42 +143,6 @@ void Socket::updateInfo()
   int ret = getsockname(_socket, reinterpret_cast<struct sockaddr*>(&_addr), &_addrlen);
   if (ret)
     throw Error(strerror(errno));
-}
-
-inline char* Socket::inet_ntop(int af, const void* src, char* dest, size_t length)
-{
-  if (af != AF_INET && af != AF_INET6)
-    return nullptr;
-
-  struct sockaddr_storage storage;
-  DWORD address_length;
-
-  if (af == AF_INET)
-    {
-      address_length = sizeof(struct sockaddr_in);
-      (reinterpret_cast<struct sockaddr_in*>(&storage))->sin_family = AF_INET;
-      (reinterpret_cast<struct sockaddr_in*>(&storage))->sin_port = 0;
-      std::memcpy(&storage, src, address_length);
-    }
-  else
-    {
-      address_length = sizeof(struct sockaddr_in6);
-      (reinterpret_cast<struct sockaddr_in6*>(&storage))->sin6_family = AF_INET6;
-      (reinterpret_cast<struct sockaddr_in6*>(&storage))->sin6_port = 0;
-      (reinterpret_cast<struct sockaddr_in6*>(&storage))->sin6_flowinfo = 0;
-      //(reinterpret_cast<struct sockaddr_in6*>(&storage))->sin6_scope_id = scope_id;
-      std::memcpy(&storage, src, address_length);
-    }
-
-  DWORD string_length = static_cast<DWORD>(length);
-  LPWSTR string_buffer = new WCHAR[length];
-  int result = ::WSAAddressToStringW(reinterpret_cast<struct sockaddr*>(&storage), address_length, 0, string_buffer, &string_length);
-  ::WideCharToMultiByte(CP_ACP, 0, string_buffer, -1, dest, length, 0, 0);
-  delete[] string_buffer;
-
-  if (result == -1)
-    return nullptr;
-  return dest;
 }
 
 };
