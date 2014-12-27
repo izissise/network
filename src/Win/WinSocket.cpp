@@ -98,7 +98,7 @@ std::string Socket::ipAddr(const struct sockaddr_storage& addr)
   if (sa->sa_family == AF_INET)
     res = reinterpret_cast<decltype(res)>(&((reinterpret_cast<const struct sockaddr_in*>(sa))->sin_addr));
   else if (sa->sa_family == AF_INET6)
-    res = reinterpret_cast<decltype(res)*>(&((reinterpret_cast<const struct sockaddr_in6*>(sa))->sin6_addr));
+    res = reinterpret_cast<decltype(res)>(&((reinterpret_cast<const struct sockaddr_in6*>(sa))->sin6_addr));
   else
     throw Error("Unknown socket family");
   InetNtop((reinterpret_cast<const struct sockaddr*>(&addr))->sa_family,
