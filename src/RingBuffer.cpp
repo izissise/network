@@ -31,6 +31,11 @@ void RingBuffer::readBuffer(Network::Buffer& data, size_t size)
   size_t	tmpsize;
 
   left = getLeftRead();
+  if (left == 0 || size == 0)
+    {
+      data = "";
+      return;
+    }
   size = size < left ? size : left;
   tmpsize = (2 * _buffSize - _idxR) % _buffSize;
   data.resize(size);
